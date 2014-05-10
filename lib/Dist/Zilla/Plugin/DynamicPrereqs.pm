@@ -152,6 +152,10 @@ Future options may include:
 
 =end :list
 
+It is also quite possible that there will be customized condition options,
+e.g. C<-can_xs>, that will automatically provide common subroutines for use in
+condition expressions.
+
 =head1 SUPPORT
 
 =for stopwords irc
