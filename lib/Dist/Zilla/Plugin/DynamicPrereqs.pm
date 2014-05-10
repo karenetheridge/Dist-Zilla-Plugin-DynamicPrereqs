@@ -10,6 +10,7 @@ with
     'Dist::Zilla::Role::MetaProvider',
     'Dist::Zilla::Role::AfterBuild',
 ;
+use MooseX::SlurpyConstructor 1.2;
 use List::Util 'first';
 use namespace::autoclean;
 
@@ -19,6 +20,16 @@ has raw => (
     handles => { raw => 'elements' },
     lazy => 1,
     default => sub { [] },
+);
+
+has _extra_args => (
+    isa => 'HashRef[Str]',
+    init_arg => undef,
+    lazy => 1,
+    default => sub { {} },
+    traits => ['Hash'],
+    handles => { _extra_keys => 'keys', _extra_args => 'elements' },
+    slurpy => 1,
 );
 
 sub mvp_multivalue_args { qw(raw) }
@@ -37,6 +48,13 @@ sub after_build
 sub setup_installer
 {
     my $self = shift;
+
+    if (my @extra_keys = $self->_extra_keys)
+    {
+        # this should be done in BUILD instead, but MooseX::SlurpyConstructor is lame.
+        $self->log('Warning: unrecognized argument' . (@extra_keys > 1 ? 's' : '')
+                . ' (' . join(', ', @extra_keys) . ') passed. Perhaps you need to upgrade?');
+    }
 
     my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};
     $self->log_fatal('No Makefile.PL found!') if not $file;
