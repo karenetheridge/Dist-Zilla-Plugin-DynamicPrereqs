@@ -1,6 +1,6 @@
 /.ackrc
 /.build/
-!.gitignore
+!/.gitignore
 /.latest
 /Dist-Zilla-Plugin-DynamicPrereqs-*/
 /Dist-Zilla-Plugin-DynamicPrereqs-*.tar.gz
