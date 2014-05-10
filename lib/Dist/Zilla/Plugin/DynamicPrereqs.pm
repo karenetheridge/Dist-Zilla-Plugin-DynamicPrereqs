@@ -39,6 +39,8 @@ sub setup_installer
     my $self = shift;
 
     my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};
+    $self->log_fatal('No Makefile.PL found!') if not $file;
+
     my $content = $file->content;
 
     $self->log_debug('Inserting dynamic prereq into Makefile.PL...');
