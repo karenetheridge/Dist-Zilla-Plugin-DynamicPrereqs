@@ -75,6 +75,12 @@ In your F<dist.ini>:
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
     -raw = if eval { require Role::Tiny; 1 };
 
+or:
+
+    [DynamicPrereqs]
+    -raw = $WriteMakefileArgs{TEST_REQUIRES}{'Devel::Cover'} = $FallbackPrereqs{'Devel::Cover'} = '0'
+    -raw = if $ENV{EXTENDED_TESTING};
+
 =head1 DESCRIPTION
 
 This is a L<Dist::Zilla> plugin that inserts code into your F<Makefile.PL> to
