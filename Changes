@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          - fix tests that fail when ExtUtils::MakeMaker is at version 6.63_02
+            or older
 
 0.001     2014-05-10 23:04:10Z
           - Initial release.
