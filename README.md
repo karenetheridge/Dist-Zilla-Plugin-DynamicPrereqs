@@ -4,7 +4,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 # VERSION
 
-version 0.001
+version 0.002
 
 # SYNOPSIS
 
@@ -26,8 +26,8 @@ This is a [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla) plugin that insert
 indicate dynamic (installer-side) prerequisites.
 
 Code is inserted immediately after the declarations for `%WriteMakefileArgs`
-and `%FallbackPrereqs`, before they are conditionally modified when an older
-[ExtUtils::MakeMaker](https://metacpan.org/pod/ExtUtils::MakeMaker) is installed.  This gives you an opportunity to add to
+and `%FallbackPrereqs`, before they are conditionally modified (when an older
+[ExtUtils::MakeMaker](https://metacpan.org/pod/ExtUtils::MakeMaker) is installed).  This gives you an opportunity to add to
 the `WriteMakefile` arguments: `PREREQ_PM`, `BUILD_REQUIRES`, and
 `TEST_REQUIRES`, and therefore modify the prerequisites in the user's
 `MYMETA.yml` and `MYMETA.json` based on conditions found on the user's system.
