@@ -105,8 +105,8 @@ This is a L<Dist::Zilla> plugin that inserts code into your F<Makefile.PL> to
 indicate dynamic (installer-side) prerequisites.
 
 Code is inserted immediately after the declarations for C<%WriteMakefileArgs>
-and C<%FallbackPrereqs>, before they are conditionally modified when an older
-L<ExtUtils::MakeMaker> is installed.  This gives you an opportunity to add to
+and C<%FallbackPrereqs>, before they are conditionally modified (when an older
+L<ExtUtils::MakeMaker> is installed).  This gives you an opportunity to add to
 the C<WriteMakefile> arguments: C<PREREQ_PM>, C<BUILD_REQUIRES>, and
 C<TEST_REQUIRES>, and therefore modify the prerequisites in the user's
 F<MYMETA.yml> and F<MYMETA.json> based on conditions found on the user's system.
