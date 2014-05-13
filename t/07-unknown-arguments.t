@@ -36,7 +36,7 @@ is(
     exception { $tzil->build },
     undef,
     'build proceeds normally',
-) or diag "log messages:\n", join("\n", @{ $tzil->log_messages });
+) or diag 'got log messages: ', explain $tzil->log_messages;
 
 cmp_deeply(
     $tzil->log_messages,
@@ -44,6 +44,6 @@ cmp_deeply(
         re(qr/\QWarning: unrecognized argument (unknown_arg) passed. Perhaps you need to upgrade?\E/),
     ),
     'warning issued about unrecognized arguments',
-) or diag "log messages:\n", join("\n", @{ $tzil->log_messages });
+) or diag 'got log messages: ', explain $tzil->log_messages;
 
 done_testing;

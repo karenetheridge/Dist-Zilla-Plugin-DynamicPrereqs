@@ -66,7 +66,7 @@ use Path::Tiny;
         exception { $tzil->build },
         qr/Build.PL detected - dynamic prereqs will not be added to it!/,
         'Makefile.PL and *only* Makefile.PL supported at this time',
-    ) or diag "log messages:\n", join("\n", @{ $tzil->log_messages });
+    ) or diag 'got log messages: ', explain $tzil->log_messages;
 }
 
 done_testing;

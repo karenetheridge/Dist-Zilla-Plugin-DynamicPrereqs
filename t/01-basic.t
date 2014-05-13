@@ -37,7 +37,7 @@ is(
     exception { $tzil->build },
     undef,
     'build proceeds normally',
-) or diag "log messages:\n", join("\n", @{ $tzil->log_messages });
+) or diag 'got log messages: ', explain $tzil->log_messages;
 
 my $build_dir = path($tzil->tempdir)->child('build');
 

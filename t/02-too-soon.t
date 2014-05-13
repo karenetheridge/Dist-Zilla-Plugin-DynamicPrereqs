@@ -38,6 +38,6 @@ like(
     # able to find a Makefile.PL but not find the adjacent code for munging.
     qr/(No Makefile.PL found!|failed to find position in Makefile.PL to munge!)/,
     'build aborts due to bad plugin ordering',
-) or diag "log messages:\n", join("\n", @{ $tzil->log_messages });
+) or diag 'got log messages: ', explain $tzil->log_messages;
 
 done_testing;
