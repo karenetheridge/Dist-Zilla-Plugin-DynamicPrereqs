@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
           - really fix tests this time...
+          - new runtime check for versions of [MakeMaker::Awesome] that are
+            too old to be compatible with the munging done in this plugin
 
 0.002     2014-05-13 05:03:02Z
           - fix tests that fail when ExtUtils::MakeMaker is at version 6.63_02

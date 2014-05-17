@@ -12,6 +12,7 @@ with
 ;
 use MooseX::SlurpyConstructor 1.2;
 use List::Util 'first';
+use Module::Runtime 'module_notional_filename';
 use namespace::autoclean;
 
 has raw => (
@@ -48,6 +49,10 @@ sub after_build
 sub setup_installer
 {
     my $self = shift;
+
+    $self->log_fatal('[MakeMaker::Awesome] must be at least version 0.19 to be used with [DynamicPrereqs]')
+        if $INC{module_notional_filename('Dist::Zilla::Plugin::MakeMaker::Awesome')}
+            and not eval { Dist::Zilla::Plugin::MakeMaker::Awesome->VERSION('0.19') };
 
     if (my @extra_keys = $self->_extra_keys)
     {
