@@ -28,7 +28,7 @@ my $tzil = Builder->from_config(
                 ],
                 [ DynamicPrereqs => 'strict' => {
                         raw => [
-                            q|$WriteMakefileArgs{PREREQ_PM}{'strict'} = $FallbackPrereqs{''} = '0.001'|,
+                            q|$WriteMakefileArgs{PREREQ_PM}{'strict'} = $FallbackPrereqs{'strict'} = '0.001'|,
                             q|if eval { require strict; 1 };|,
                         ],
                     },
@@ -62,13 +62,22 @@ isnt(
         . "\n"
         . q|if eval { require Test::More; 1 };|
         . "\n\n"
+    ),
+    -1,
+    'code inserted into Makefile.PL from first plugin',
+) or diag "found Makefile.PL content:\n", $makefile;
+
+isnt(
+    index(
+        $makefile,
+        "\n\n"
         . q|$WriteMakefileArgs{PREREQ_PM}{'strict'} = $FallbackPrereqs{'strict'} = '0.001'|
         . "\n"
         . q|if eval { require strict; 1 };|
         . "\n\n"
-    )
+    ),
     -1,
-    'code inserted into Makefile.PL from both plugins',
+    'code inserted into Makefile.PL from second plugin',
 ) or diag "found Makefile.PL content:\n", $makefile;
 
 {
