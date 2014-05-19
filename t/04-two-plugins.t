@@ -99,6 +99,7 @@ cmp_deeply(
     })),
     'dynamic_config reset to 0 in MYMETA; dynamic prereqs have been added from both plugins',
 )
-or diag "found MYMETA.json content:\n", $mymeta_json;
+or diag "found MYMETA.json content:\n", $mymeta_json,
+    "found Makefile.PL content:\n", $makefile;
 
 done_testing;
