@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.004     2014-05-19 05:15:36Z
           - fix tests that fail with older ExtUtils::MakeMaker due two stupid
             typos that conspired together in a web of evil
 

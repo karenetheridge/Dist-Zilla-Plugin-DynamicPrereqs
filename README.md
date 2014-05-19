@@ -4,7 +4,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 # VERSION
 
-version 0.003
+version 0.004
 
 # SYNOPSIS
 
