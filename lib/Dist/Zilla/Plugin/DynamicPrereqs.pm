@@ -73,7 +73,7 @@ sub setup_installer
     # TODO: if marker cannot be found, fall back to looking for just
     # %WriteMakefileArgs -- this requires modifying the content too.
     $self->log_fatal('failed to find position in Makefile.PL to munge!')
-        if $content !~ m'^my %FallbackPrereqs = \(\n(?:[^;]+)^\);$'mg;
+        if $content !~ m'^my %FallbackPrereqs = \(\n[^;]+^\);$'mg;
 
     my $pos = pos($content);
 
