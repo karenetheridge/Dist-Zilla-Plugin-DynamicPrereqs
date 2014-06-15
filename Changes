@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          - fix case where Makefile.PL content was not recognized when there
+            were no (static) prequisites declared for the distribution
 
 0.004     2014-05-19 05:15:36Z
           - fix tests that fail with older ExtUtils::MakeMaker due two stupid
