@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.005     2014-06-16 00:18:15Z
           - fix case where Makefile.PL content was not recognized when there
             were no (static) prequisites declared for the distribution
 
