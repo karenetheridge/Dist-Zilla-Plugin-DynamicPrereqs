@@ -166,15 +166,12 @@ interface changes.
 
 Future options may include:
 
-=begin :list
-
+=for :list
 * C<-condition> a Perl expression that is tested before additional prereqs are added
 * C<-phase> the phase in which subsequently-specified module/version pairs will be added
 * C<-runtime> a module and version that is added to runtime prereqs should the C<-condition> be satisfied
 * C<-test> a module and version that is added to test prereqs should the C<-condition> be satisfied
 * C<-build> a module and version that is added to build prereqs should the C<-condition> be satisfied
-
-=end :list
 
 It is also quite possible that there will be customized condition options,
 e.g. C<-can_xs>, that will automatically provide common subroutines for use in
@@ -190,11 +187,8 @@ I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 
 =head1 SEE ALSO
 
-=begin :list
-
+=for :list
 * L<Dist::Zilla::Plugin::MakeMaker>
 * L<ExtUtils::MakeMaker/Using Attributes and Parameters>
-
-=end :list
 
 =cut
