@@ -190,5 +190,7 @@ I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 =for :list
 * L<Dist::Zilla::Plugin::MakeMaker>
 * L<ExtUtils::MakeMaker/Using Attributes and Parameters>
+* L<Dist::Zilla::Plugin::OSPrereqs>
+* L<Dist::Zilla::Plugin::PerlVersionPrereqs>
 
 =cut
