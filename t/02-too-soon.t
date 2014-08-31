@@ -40,4 +40,7 @@ like(
     'build aborts due to bad plugin ordering',
 ) or diag 'got log messages: ', explain $tzil->log_messages;
 
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
+
 done_testing;

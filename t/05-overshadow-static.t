@@ -116,4 +116,7 @@ cmp_deeply(
 )
 or note 'found MYMETA.json content:', $mymeta_json;
 
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
+
 done_testing;

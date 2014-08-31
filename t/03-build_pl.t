@@ -30,11 +30,15 @@ use Path::Tiny;
         },
     );
 
+    $tzil->chrome->logger->set_debug(1);
     like(
         exception { $tzil->build },
         qr/No Makefile.PL found!/,
         'only Makefile.PL supported at this time',
     );
+
+    diag 'got log messages: ', explain $tzil->log_messages
+        if not Test::Builder->new->is_passing;
 }
 
 {
@@ -67,6 +71,9 @@ use Path::Tiny;
         qr/Build.PL detected - dynamic prereqs will not be added to it!/,
         'Makefile.PL and *only* Makefile.PL supported at this time',
     ) or diag 'got log messages: ', explain $tzil->log_messages;
+
+    diag 'got log messages: ', explain $tzil->log_messages
+        if not Test::Builder->new->is_passing;
 }
 
 done_testing;

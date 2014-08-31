@@ -109,4 +109,7 @@ cmp_deeply(
 or diag "found MYMETA.json content:\n", $mymeta_json,
     "found Makefile.PL content:\n", $makefile;
 
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
+
 done_testing;
