@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          - no longer dropping the last character off Makefile.PL (significant
+            when several copies of this plugin run at once!)
 
 0.005     2014-06-16 00:18:15Z
           - fix case where Makefile.PL content was not recognized when there

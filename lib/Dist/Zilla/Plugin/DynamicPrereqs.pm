@@ -82,7 +82,7 @@ sub setup_installer
         . "\n\n"
         . "# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>') . "\n"
         . join("\n", $self->raw)
-        . "\n" . substr($content, $pos, -1);
+        . "\n" . substr($content, $pos);
 
     $file->content($content);
     return;
