@@ -47,10 +47,12 @@ ok(-e $file, 'Makefile.PL created');
 my $makefile = $file->slurp_utf8;
 unlike($makefile, qr/[^\S\n]\n/m, 'no trailing whitespace in modified file');
 
+my $version = Dist::Zilla::Plugin::DynamicPrereqs->VERSION || '<self>';
 isnt(
     index(
         $makefile,
         <<CONTENT),
+# inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 \$WriteMakefileArgs{PREREQ_PM}{'Test::More'} = \$FallbackPrereqs{'Test::More'} = '0.123'
 if eval { require Test::More; 1 };
 

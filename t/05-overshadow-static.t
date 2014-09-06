@@ -71,10 +71,12 @@ ok(-e $file, 'Makefile.PL created');
 my $makefile = $file->slurp_utf8;
 unlike($makefile, qr/[^\S\n]\n/m, 'no trailing whitespace in modified file');
 
+my $version = Dist::Zilla::Plugin::DynamicPrereqs->VERSION || '<self>';
 isnt(
     index(
         $makefile,
         <<CONTENT),
+# inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 \$WriteMakefileArgs{PREREQ_PM}{'Dist::Zilla'} = \$FallbackPrereqs{'Dist::Zilla'} = '4.300039'
 if eval { require CPAN::Meta; CPAN::Meta->VERSION >= '2.132620' };
 

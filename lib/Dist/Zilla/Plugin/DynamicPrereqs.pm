@@ -76,9 +76,11 @@ sub setup_installer
         if $content !~ m'^my %FallbackPrereqs = \((?:\n[^;]+^)?\);$'mg;
 
     my $pos = pos($content);
+    my $version = $self->VERSION || '<self>';
 
     $content = substr($content, 0, $pos)
         . "\n\n"
+        . "# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>') . "\n"
         . join("\n", $self->raw)
         . "\n" . substr($content, $pos, -1);
 
