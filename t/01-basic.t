@@ -41,6 +41,8 @@ is(
 
 my $build_dir = path($tzil->tempdir)->child('build');
 
+# we intentionally test META.json not $tzil->distmeta, for comparability to
+# the MYMETA.json test below.
 my $meta_json = $build_dir->child('META.json')->slurp_raw;
 cmp_deeply(
     $meta_json,
