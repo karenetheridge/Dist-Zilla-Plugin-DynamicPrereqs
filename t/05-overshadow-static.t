@@ -74,12 +74,11 @@ unlike($makefile, qr/[^\S\n]\n/m, 'no trailing whitespace in modified file');
 isnt(
     index(
         $makefile,
-        "\n\n"
-        . q|$WriteMakefileArgs{PREREQ_PM}{'Dist::Zilla'} = $FallbackPrereqs{'Dist::Zilla'} = '4.300039'|
-        . "\n"
-        . q|if eval { require CPAN::Meta; CPAN::Meta->VERSION >= '2.132620' };|
-        . "\n\n"
-    )
+        <<CONTENT),
+\$WriteMakefileArgs{PREREQ_PM}{'Dist::Zilla'} = \$FallbackPrereqs{'Dist::Zilla'} = '4.300039'
+if eval { require CPAN::Meta; CPAN::Meta->VERSION >= '2.132620' };
+
+CONTENT
     -1,
     'code inserted into Makefile.PL',
 ) or diag "found Makefile.PL content:\n", $makefile;

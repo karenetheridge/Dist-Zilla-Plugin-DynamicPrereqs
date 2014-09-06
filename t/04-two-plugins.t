@@ -57,12 +57,11 @@ unlike($makefile, qr/[^\S\n]\n/m, 'no trailing whitespace in modified file');
 isnt(
     index(
         $makefile,
-        "\n\n"
-        . q|$WriteMakefileArgs{PREREQ_PM}{'Test::More'} = $FallbackPrereqs{'Test::More'} = '0.123'|
-        . "\n"
-        . q|if eval { require Test::More; 1 };|
-        . "\n\n"
-    ),
+        <<CONTENT),
+\$WriteMakefileArgs{PREREQ_PM}{'Test::More'} = \$FallbackPrereqs{'Test::More'} = '0.123'
+if eval { require Test::More; 1 };
+
+CONTENT
     -1,
     'code inserted into Makefile.PL from first plugin',
 ) or diag "found Makefile.PL content:\n", $makefile;
@@ -70,12 +69,11 @@ isnt(
 isnt(
     index(
         $makefile,
-        "\n\n"
-        . q|$WriteMakefileArgs{PREREQ_PM}{'strict'} = $FallbackPrereqs{'strict'} = '0.001'|
-        . "\n"
-        . q|if eval { require strict; 1 };|
-        . "\n\n"
-    ),
+        <<CONTENT),
+\$WriteMakefileArgs{PREREQ_PM}{'strict'} = \$FallbackPrereqs{'strict'} = '0.001'
+if eval { require strict; 1 };
+
+CONTENT
     -1,
     'code inserted into Makefile.PL from second plugin',
 ) or diag "found Makefile.PL content:\n", $makefile;
