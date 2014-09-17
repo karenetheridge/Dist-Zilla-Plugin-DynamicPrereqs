@@ -36,7 +36,24 @@ has _extra_args => (
 
 sub mvp_multivalue_args { qw(raw) }
 
-sub mvp_aliases { +{ '-raw' => 'raw' } }
+sub mvp_aliases { +{ '-raw' => 'raw', '-delimiter' => 'delimiter' } }
+
+around BUILDARGS => sub
+{
+    my $orig = shift;
+    my $class = shift;
+
+    my $args = $class->$orig(@_);
+
+    use Data::Dumper;
+    local $Data::Dumper::Maxdepth = 2;
+    if (length(my $delimiter = delete $args->{delimiter}))
+    {
+        s/^\Q$delimiter\E// foreach @{$args->{raw}};
+    }
+
+    return $args;
+};
 
 sub metadata { return +{ dynamic_config => 1 } }
 
@@ -104,8 +121,9 @@ In your F<dist.ini>:
 or:
 
     [DynamicPrereqs]
-    -raw = $WriteMakefileArgs{TEST_REQUIRES}{'Devel::Cover'} = $FallbackPrereqs{'Devel::Cover'} = '0'
-    -raw = if $ENV{EXTENDED_TESTING};
+    -delimiter = |
+    -raw = |$WriteMakefileArgs{TEST_REQUIRES}{'Devel::Cover'} = $FallbackPrereqs{'Devel::Cover'} = '0'
+    -raw = |    if $ENV{EXTENDED_TESTING};
 
 =head1 DESCRIPTION
 
@@ -154,6 +172,14 @@ these modules to C<configure_requires> prereqs in metadata (e.g. via
 C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
 =for Pod::Coverage mvp_multivalue_args mvp_aliases metadata after_build setup_installer
+
+=head2 C<-delimiter>
+
+A string, usually a single character, which is stripped from the beginning of
+all C<-raw> lines. This is because the INI file format strips all leading
+whitespace from option values, so including this character at the front allows
+you to use leading whitespace in an option string, so you can indent blocks of
+code properly.
 
 =head1 WARNING: UNSTABLE API!
 
