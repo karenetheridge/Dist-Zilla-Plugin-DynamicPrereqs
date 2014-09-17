@@ -20,7 +20,7 @@ my $tzil = Builder->from_config(
                 [ Prereqs => { 'strict' => '0', 'Dist::Zilla' => '5.0' } ],
                 [ MakeMaker => ],
                 [ DynamicPrereqs => {
-                        raw => [
+                        -raw => [
                             q|$WriteMakefileArgs{PREREQ_PM}{'Dist::Zilla'} = $FallbackPrereqs{'Dist::Zilla'} = '4.300039'|,
                             q|if eval { require CPAN::Meta; CPAN::Meta->VERSION >= '2.132620' };|,
                         ],

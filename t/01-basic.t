@@ -20,7 +20,7 @@ my $tzil = Builder->from_config(
                 [ Prereqs => { 'strict' => '0', 'Test::More' => '0' } ],
                 [ MakeMaker => ],
                 [ DynamicPrereqs => {
-                        raw => [
+                        -raw => [
                             q|$WriteMakefileArgs{PREREQ_PM}{'Test::More'} = $FallbackPrereqs{'Test::More'} = '0.123'|,
                             q|if eval { require Test::More; 1 };|,
                         ],
