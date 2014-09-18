@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.007     2014-09-18 05:26:51Z
           - new 'delimiter' option, which allows the use of leading whitespace in
           '-raw' strings
 
