@@ -45,7 +45,8 @@ around BUILDARGS => sub
 
     my $args = $class->$orig(@_);
 
-    if (length(my $delimiter = delete $args->{delimiter}))
+    my $delimiter = delete $args->{delimiter};
+    if (defined $delimiter and length($delimiter))
     {
         s/^\Q$delimiter\E// foreach @{$args->{raw}};
     }
