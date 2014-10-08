@@ -45,8 +45,6 @@ around BUILDARGS => sub
 
     my $args = $class->$orig(@_);
 
-    use Data::Dumper;
-    local $Data::Dumper::Maxdepth = 2;
     if (length(my $delimiter = delete $args->{delimiter}))
     {
         s/^\Q$delimiter\E// foreach @{$args->{raw}};
