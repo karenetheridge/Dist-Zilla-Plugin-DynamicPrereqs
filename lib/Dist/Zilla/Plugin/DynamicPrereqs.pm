@@ -174,6 +174,8 @@ C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
 =head2 C<-delimiter>
 
+(Available since version 0.007)
+
 A string, usually a single character, which is stripped from the beginning of
 all C<-raw> lines. This is because the INI file format strips all leading
 whitespace from option values, so including this character at the front allows
