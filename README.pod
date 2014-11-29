@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 SYNOPSIS
 
@@ -74,6 +74,8 @@ C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 =for Pod::Coverage mvp_multivalue_args mvp_aliases metadata after_build setup_installer
 
 =head2 C<-delimiter>
+
+(Available since version 0.007)
 
 A string, usually a single character, which is stripped from the beginning of
 all C<-raw> lines. This is because the INI file format strips all leading
