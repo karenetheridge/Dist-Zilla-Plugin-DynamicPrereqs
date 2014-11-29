@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+          - bump minimum required version of ExtUtils::MakeMaker, to avoid a
+            mess in MYMETA.json during testing
 
 0.008     2014-10-08 04:44:15Z
           - fix uninitialized warning on 5.10.x and earlier
