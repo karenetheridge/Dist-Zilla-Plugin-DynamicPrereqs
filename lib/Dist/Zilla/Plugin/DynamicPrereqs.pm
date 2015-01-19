@@ -13,6 +13,7 @@ with
 ;
 use List::Util 'first';
 use Module::Runtime 'module_notional_filename';
+use Try::Tiny;
 use namespace::autoclean;
 
 has raw => (
@@ -22,14 +23,33 @@ has raw => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        $self->log('no content found in -raw!');
-        [];
+
+        my @lines;
+        if (my $filename = $self->raw_from_file)
+        {
+            my $file = first { $_->name eq $filename } @{ $self->zilla->files };
+            $self->log_fatal([ 'no such file in build: %s' ], $filename) if not $file;
+            $self->zilla->prune_file($file);
+            try {
+                @lines = split("\n", $file->content);
+            }
+            catch {
+                $self->log_fatal($_);
+            };
+        }
+
+        $self->log('no content found in -raw!') if not @lines;
+        return \@lines;
     },
+);
+
+has raw_from_file => (
+    is => 'ro', isa => 'Str',
 );
 
 sub mvp_multivalue_args { qw(raw) }
 
-sub mvp_aliases { +{ '-raw' => 'raw', '-delimiter' => 'delimiter' } }
+sub mvp_aliases { +{ '-raw' => 'raw', '-delimiter' => 'delimiter', '-raw_from_file' => 'raw_from_file' } }
 
 around BUILDARGS => sub
 {
@@ -123,6 +143,11 @@ or:
     -raw = |$WriteMakefileArgs{TEST_REQUIRES}{'Devel::Cover'} = $FallbackPrereqs{'Devel::Cover'} = '0'
     -raw = |    if $ENV{EXTENDED_TESTING};
 
+or:
+
+    [DynamicPrereqs]
+    -raw_from_file = Makefile.args      # code snippet in this file
+
 =head1 DESCRIPTION
 
 This is a L<Dist::Zilla> plugin that inserts code into your F<Makefile.PL> to
@@ -180,6 +205,14 @@ all C<-raw> lines. This is because the INI file format strips all leading
 whitespace from option values, so including this character at the front allows
 you to use leading whitespace in an option string, so you can indent blocks of
 code properly.
+
+=head2 C<-raw_from_file>
+
+(Available since version 0.010)
+
+A filename that contains the code to be inserted; must be valid and complete
+perl statements, as with C<-raw> above.  This file must be part of the build,
+but it is pruned from the built distribution.
 
 =head1 WARNING: UNSTABLE API!
 
