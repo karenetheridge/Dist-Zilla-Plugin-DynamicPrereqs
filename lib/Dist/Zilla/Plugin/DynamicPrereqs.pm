@@ -21,7 +21,11 @@ has raw => (
     traits => ['Array'],
     handles => { raw => 'elements' },
     lazy => 1,
-    default => sub { [] },
+    default => sub {
+        my $self = shift;
+        $self->log('no content found in -raw!');
+        [];
+    },
 );
 
 has _extra_args => (
