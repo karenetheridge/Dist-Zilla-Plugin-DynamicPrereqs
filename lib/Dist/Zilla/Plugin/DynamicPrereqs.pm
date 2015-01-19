@@ -49,7 +49,11 @@ has raw_from_file => (
 
 sub mvp_multivalue_args { qw(raw) }
 
-sub mvp_aliases { +{ '-raw' => 'raw', '-delimiter' => 'delimiter', '-raw_from_file' => 'raw_from_file' } }
+sub mvp_aliases { +{
+    '-raw' => 'raw',
+    '-delimiter' => 'delimiter',
+    '-raw_from_file' => 'raw_from_file',
+} }
 
 around BUILDARGS => sub
 {
