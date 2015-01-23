@@ -3,6 +3,8 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
           - new -raw_from_file option, when content is too long to inline into
             dist.ini
+          - new -include_sub option, to include definitions of commonly-used
+            helper subroutines
 
 0.009     2014-11-29 06:28:55Z
           - bump minimum required version of ExtUtils::MakeMaker, to avoid a

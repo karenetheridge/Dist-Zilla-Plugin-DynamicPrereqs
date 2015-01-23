@@ -9,11 +9,14 @@ use Moose;
 with
     'Dist::Zilla::Role::InstallTool',
     'Dist::Zilla::Role::MetaProvider',
+    'Dist::Zilla::Role::PrereqSource',
     'Dist::Zilla::Role::AfterBuild',
 ;
-use List::Util 'first';
+use List::Util 1.33 qw(first notall);
 use Module::Runtime 'module_notional_filename';
 use Try::Tiny;
+use Path::Tiny;
+use File::ShareDir;
 use namespace::autoclean;
 
 has raw => (
@@ -47,12 +50,21 @@ has raw_from_file => (
     is => 'ro', isa => 'Str',
 );
 
-sub mvp_multivalue_args { qw(raw) }
+has include_subs => (
+    isa => 'ArrayRef[Str]',
+    traits => ['Array'],
+    handles => { include_subs => 'elements' },
+    lazy => 1,
+    default => sub { [] },
+);
+
+sub mvp_multivalue_args { qw(raw include_subs) }
 
 sub mvp_aliases { +{
     '-raw' => 'raw',
     '-delimiter' => 'delimiter',
     '-raw_from_file' => 'raw_from_file',
+    '-include_sub' => 'include_subs',
 } }
 
 around BUILDARGS => sub
@@ -123,8 +135,77 @@ sub setup_installer
         . join("\n", $self->raw)
         . "\n" . substr($content, $pos);
 
+    $content =~ s/\n+\z/\n/;
+
+    if (my @include_subs = $self->_all_required_subs)
+    {
+        $content .= "\n"
+            . "# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>') . "\n"
+            . join("\n", map { path($self->_include_sub_root, $_)->slurp_utf8 } @include_subs);
+    }
+
     $file->content($content);
     return;
+}
+
+my %sub_prereqs = (
+);
+
+sub register_prereqs
+{
+    my $self = shift;
+    foreach my $required_sub ($self->_all_required_subs)
+    {
+        my $prereqs = $sub_prereqs{$required_sub};
+        $self->zilla->register_prereqs(
+            {
+                phase => 'configure',
+                type  => 'requires',
+            },
+            %$prereqs,
+        ) if $prereqs and %$prereqs;
+    }
+}
+
+has _include_sub_root => (
+    is => 'ro', isa => 'Str',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        path(File::ShareDir::module_dir($self->meta->name), 'include_subs')->stringify;
+    },
+);
+
+# indicates subs that require other subs to be included
+my %sub_dependencies = (
+);
+
+has _all_required_subs => (
+    isa => 'ArrayRef[Str]',
+    traits => ['Array'],
+    handles => { _all_required_subs => 'elements' },
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        [ sort $self->_all_required_subs_for($self->include_subs) ];
+    },
+);
+
+my %required_subs;
+sub _all_required_subs_for
+{
+    my ($self, @subs) = @_;
+
+    @required_subs{@subs} = (() x @subs);
+
+    foreach my $sub (@subs)
+    {
+        my @subs = @{ $sub_dependencies{$sub} || [] };
+        $self->_all_required_subs_for(@subs)
+            if notall { exists $required_subs{$_} } @subs;
+    }
+
+    return keys %required_subs;
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -145,7 +226,8 @@ or:
     [DynamicPrereqs]
     -delimiter = |
     -raw = |$WriteMakefileArgs{TEST_REQUIRES}{'Devel::Cover'} = $FallbackPrereqs{'Devel::Cover'} = '0'
-    -raw = |    if $ENV{EXTENDED_TESTING};
+    -raw = |    if $ENV{EXTENDED_TESTING} or is_smoker();
+    -include_sub = is_smoker
 
 or:
 
@@ -198,7 +280,7 @@ If you use external libraries in the code you are inserting, you B<must> add
 these modules to C<configure_requires> prereqs in metadata (e.g. via
 C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
-=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build setup_installer
+=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build setup_installer register_prereqs
 
 =head2 C<-delimiter>
 
@@ -217,6 +299,24 @@ code properly.
 A filename that contains the code to be inserted; must be valid and complete
 perl statements, as with C<-raw> above.  This file must be part of the build,
 but it is pruned from the built distribution.
+
+=head2 C<-include_sub>
+
+(Available since version 0.010)
+
+The name of a subroutine that you intend to call from the code inserted via
+C<-raw> or C<-raw_from_file>. Its definition will be included in
+F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
+modules will be added to C<configure requires> metadata.
+This option can be used more than once.
+
+Available subs are:
+
+=over 4
+
+=item * C<is_smoker()> - is the installation on a smoker machine?
+
+=back
 
 =head1 WARNING: UNSTABLE API!
 
@@ -237,10 +337,6 @@ Future options may include:
 * C<-runtime> a module and version that is added to runtime prereqs should the C<-condition> be satisfied
 * C<-test> a module and version that is added to test prereqs should the C<-condition> be satisfied
 * C<-build> a module and version that is added to build prereqs should the C<-condition> be satisfied
-
-It is also quite possible that there will be customized condition options,
-e.g. C<-can_xs>, that will automatically provide common subroutines for use in
-condition expressions.
 
 =head1 SUPPORT
 
