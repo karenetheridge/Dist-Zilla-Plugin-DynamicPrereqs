@@ -6,9 +6,11 @@ use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::DZil;
 use Test::Fatal;
 use Path::Tiny;
-use File::pushd 'pushd';
 use Test::Deep;
 use Test::Deep::JSON;
+
+use lib 't/lib';
+use Helper;
 
 my $tzil = Builder->from_config(
     { dist_root => 't/does-not-exist' },
@@ -87,10 +89,7 @@ CONTENT
 
 ok(!-e $build_dir->child('Makefile.args'), 'arg file was removed from the build');
 
-{
-    my $wd = pushd $build_dir;
-    $tzil->plugin_named('MakeMaker')->build;
-}
+run_makemaker($tzil);
 
 my $mymeta_json = $build_dir->child('MYMETA.json')->slurp_raw;
 cmp_deeply(

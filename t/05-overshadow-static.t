@@ -6,9 +6,11 @@ use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::DZil;
 use Test::Fatal;
 use Path::Tiny;
-use File::pushd 'pushd';
 use Test::Deep;
 use Test::Deep::JSON;
+
+use lib 't/lib';
+use Helper;
 
 my $tzil = Builder->from_config(
     { dist_root => 't/does-not-exist' },
@@ -85,10 +87,7 @@ CONTENT
     'code inserted into Makefile.PL',
 ) or diag "found Makefile.PL content:\n", $makefile;
 
-{
-    my $wd = pushd $build_dir;
-    $tzil->plugin_named('MakeMaker')->build;
-}
+run_makemaker($tzil);
 
 local $TODO = 'we will need to take greater care when merging with existing prereqs';
 
