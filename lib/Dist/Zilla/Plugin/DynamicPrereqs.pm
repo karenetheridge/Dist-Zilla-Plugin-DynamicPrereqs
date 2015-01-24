@@ -357,6 +357,10 @@ Available subs are:
 
 =item * C<is_trial()> - is the release a -TRIAL or _XXX-versioned release?
 
+=item * C<is_os($os, ...)> - true if the OS is any of those listed
+
+=item * C<isnt_os($os, ...)> - true if the OS is none of those listed
+
 =back
 
 =head1 WARNING: UNSTABLE API!
