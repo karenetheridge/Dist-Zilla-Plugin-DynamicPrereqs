@@ -242,7 +242,8 @@ In your F<dist.ini>:
 
     [DynamicPrereqs]
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
-    -raw = if eval { require Role::Tiny; 1 } and !parse_args()->{PUREPERL_ONLY} and can_xs();
+    -raw = if can_use'(Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
+    -include_sub = can_use
     -include_sub = parse_args
     -include_sub = can_xs
 
@@ -350,6 +351,8 @@ Available subs are:
 =item * C<can_cc()> - can we locate a (the) C compiler
 
 =item * C<can_run()> - check if we can run some command
+
+=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded
 
 =item * C<is_smoker()> - is the installation on a smoker machine?
 
