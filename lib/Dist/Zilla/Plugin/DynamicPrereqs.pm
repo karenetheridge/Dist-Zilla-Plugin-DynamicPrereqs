@@ -11,6 +11,7 @@ with
     'Dist::Zilla::Role::MetaProvider',
     'Dist::Zilla::Role::PrereqSource',
     'Dist::Zilla::Role::AfterBuild',
+    'Dist::Zilla::Role::TextTemplate',
 ;
 use List::Util 1.33 qw(first notall);
 use Module::Runtime 'module_notional_filename';
@@ -139,9 +140,16 @@ sub setup_installer
 
     if (my @include_subs = $self->_all_required_subs)
     {
+        my @sub_definitions = map { path($self->_include_sub_root, $_)->slurp_utf8 } @include_subs;
         $content .= "\n"
             . "# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>') . "\n"
-            . join("\n", map { path($self->_include_sub_root, $_)->slurp_utf8 } @include_subs);
+            . $self->fill_in_string(
+                join("\n", @sub_definitions),
+                {
+                    dist => \($self->zilla),
+                    plugin => \$self,
+                },
+            );
     }
 
     $file->content($content);
@@ -149,6 +157,19 @@ sub setup_installer
 }
 
 my %sub_prereqs = (
+    can_xs => {
+        'ExtUtils::CBuilder' => '0.27', # see JSON::MaybeXS
+    },
+    can_cc => {
+        'Config' => '0',
+    },
+    can_run => {
+        'File::Spec' => '0',
+        'Config' => '0',
+    },
+    parse_args => {
+        'Text::ParseWords' => '0',
+    },
 );
 
 sub register_prereqs
@@ -178,6 +199,8 @@ has _include_sub_root => (
 
 # indicates subs that require other subs to be included
 my %sub_dependencies = (
+    can_xs => [ qw(can_cc) ],
+    can_cc => [ qw(can_run) ],
 );
 
 has _all_required_subs => (
@@ -219,7 +242,9 @@ In your F<dist.ini>:
 
     [DynamicPrereqs]
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
-    -raw = if eval { require Role::Tiny; 1 };
+    -raw = if eval { require Role::Tiny; 1 } and !parse_args()->{PUREPERL_ONLY} and can_xs();
+    -include_sub = parse_args
+    -include_sub = can_xs
 
 or:
 
@@ -314,7 +339,23 @@ Available subs are:
 
 =over 4
 
+=item * C<prompt_default_yes($message)> - takes a string (appending "[Y/n]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
+
+=item * C<prompt_default_no($message)> - takes a string (appending "[y/N]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
+
+=item * C<parse_args()> - returns the hashref of options that were passed as arguments to C<perl Makefile.PL>
+
+=item * C<can_xs()> - Secondary compile testing via ExtUtils::CBuilder
+
+=item * C<can_cc()> - can we locate a (the) C compiler
+
+=item * C<can_run()> - check if we can run some command
+
 =item * C<is_smoker()> - is the installation on a smoker machine?
+
+=item * C<is_interactive()> - is the installation in an interactive terminal?
+
+=item * C<is_trial()> - is the release a -TRIAL or _XXX-versioned release?
 
 =back
 
@@ -353,5 +394,6 @@ I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 * L<ExtUtils::MakeMaker/Using Attributes and Parameters>
 * L<Dist::Zilla::Plugin::OSPrereqs>
 * L<Dist::Zilla::Plugin::PerlVersionPrereqs>
+* L<Module::Install::Can>
 
 =cut
