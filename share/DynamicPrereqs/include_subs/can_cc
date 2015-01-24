@@ -1,5 +1,5 @@
 sub can_cc {
-  my @chunks = split(/ /, $Config::Config{cc}) or return;
+  my @chunks = split(/ /, $Config::Config{cc});
 
   # $Config{cc} may contain args; try to find out the program part
   while (@chunks) {
