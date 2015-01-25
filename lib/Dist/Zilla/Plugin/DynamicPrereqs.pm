@@ -19,6 +19,7 @@ use Try::Tiny;
 use Path::Tiny;
 use File::ShareDir;
 use namespace::autoclean;
+use feature 'state';
 
 has raw => (
     isa => 'ArrayRef[Str]',
@@ -138,11 +139,16 @@ sub setup_installer
 
     $content =~ s/\n+\z/\n/;
 
-    if (my @include_subs = $self->_all_required_subs)
+    # track which subs have already been included by some other instance
+    state %included_subs;
+
+    if (my @include_subs = grep { not exists $included_subs{$_} } $self->_all_required_subs)
     {
+        $content .= "\n# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>')
+            if not keys %included_subs;
+
         my @sub_definitions = map { path($self->_include_sub_root, $_)->slurp_utf8 } @include_subs;
         $content .= "\n"
-            . "# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>') . "\n"
             . $self->fill_in_string(
                 join("\n", @sub_definitions),
                 {
@@ -150,6 +156,7 @@ sub setup_installer
                     plugin => \$self,
                 },
             );
+        @included_subs{@include_subs} = (() x @include_subs);
     }
 
     $file->content($content);
