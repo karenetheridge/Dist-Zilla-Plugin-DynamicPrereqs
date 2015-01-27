@@ -1,0 +1,16 @@
+# Fix Cygwin bug on maybe_command(), fixed in EUMM 6.51_01
+BEGIN { if ( $^O eq 'cygwin' ) {
+  require ExtUtils::MM_Cygwin;
+  require ExtUtils::MM_Win32;
+  if ( ! defined(&ExtUtils::MM_Cygwin::maybe_command) ) {
+    package ExtUtils::MM_Cygwin;
+    sub maybe_command {
+      my ($self, $file) = @_;
+      if ($file =~ m{^/cygdrive/}i and ExtUtils::MM_Win32->can('maybe_command')) {
+        ExtUtils::MM_Win32->maybe_command($file);
+      } else {
+        ExtUtils::MM_Unix->maybe_command($file);
+      }
+    }
+  }
+} }

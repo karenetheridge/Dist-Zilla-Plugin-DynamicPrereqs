@@ -209,6 +209,7 @@ has _include_sub_root => (
 my %sub_dependencies = (
     can_xs => [ qw(can_cc) ],
     can_cc => [ qw(can_run) ],
+    can_run => [ qw(maybe_command) ],
 );
 
 has _all_required_subs => (
@@ -371,6 +372,8 @@ Available subs are:
 =item * C<is_os($os, ...)> - true if the OS is any of those listed
 
 =item * C<isnt_os($os, ...)> - true if the OS is none of those listed
+
+=item * C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >> (please keep using the fully-qualified form) to work in Cygwin
 
 =back
 
