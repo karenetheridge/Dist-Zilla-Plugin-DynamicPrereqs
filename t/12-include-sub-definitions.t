@@ -55,6 +55,7 @@ cmp_deeply(
                     'ExtUtils::CBuilder' => '0.27',
                     'Config' => '0',
                     'File::Spec' => 0,
+                    'File::Temp' => '0',
                     'Text::ParseWords' => '0',
                 },
             },

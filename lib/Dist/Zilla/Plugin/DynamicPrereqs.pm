@@ -165,7 +165,8 @@ sub setup_installer
 
 my %sub_prereqs = (
     can_xs => {
-        'ExtUtils::CBuilder' => '0.27', # see JSON::MaybeXS
+        'ExtUtils::CBuilder' => '0.27',
+        'File::Temp' => '0',
     },
     can_cc => {
         'Config' => '0',
