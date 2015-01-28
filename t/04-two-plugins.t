@@ -18,7 +18,6 @@ my $tzil = Builder->from_config(
         add_files => {
             path(qw(source dist.ini)) => simple_ini(
                 [ GatherDir => ],
-                [ MetaJSON => ],
                 [ Prereqs => { 'strict' => '0', 'Test::More' => '0' } ],
                 [ MakeMaker => ],
                 [ DynamicPrereqs => 'Test::More' => {

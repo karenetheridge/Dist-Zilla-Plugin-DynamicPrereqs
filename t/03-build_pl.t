@@ -14,7 +14,6 @@ use Path::Tiny;
             add_files => {
                 path(qw(source dist.ini)) => simple_ini(
                     [ GatherDir => ],
-                    [ MetaJSON => ],
                     [ Prereqs => { 'strict' => '0', 'Test::More' => '0' } ],
                     [ ModuleBuild => ],
                     [ DynamicPrereqs => {
@@ -48,7 +47,6 @@ use Path::Tiny;
             add_files => {
                 path(qw(source dist.ini)) => simple_ini(
                     [ GatherDir => ],
-                    [ MetaJSON => ],
                     [ Prereqs => { 'strict' => '0', 'Test::More' => '0' } ],
                     [ MakeMaker => ],
                     [ ModuleBuild => ],
