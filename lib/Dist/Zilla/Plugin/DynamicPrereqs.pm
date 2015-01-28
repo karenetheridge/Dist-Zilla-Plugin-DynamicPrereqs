@@ -147,6 +147,15 @@ sub setup_installer
         $content .= "\n# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>')
             if not keys %included_subs;
 
+        if (my @missing_subs = grep { !-f path($self->_include_sub_root, $_) } @include_subs)
+        {
+            $self->log_fatal(
+                @missing_subs > 1
+                    ? [ 'no definitions available for subs %s!', join(', ', map { "'" . $_  ."'" } @missing_subs) ]
+                    : [ 'no definition available for sub \'%s\'!', $missing_subs[0] ]
+            );
+        }
+
         my @sub_definitions = map { path($self->_include_sub_root, $_)->slurp_utf8 } @include_subs;
         $content .= "\n"
             . $self->fill_in_string(
