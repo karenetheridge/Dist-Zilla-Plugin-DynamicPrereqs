@@ -131,11 +131,10 @@ sub setup_installer
         if $content !~ m'^my %FallbackPrereqs = \((?:\n[^;]+^)?\);$'mg;
 
     my $pos = pos($content);
-    my $version = $self->VERSION || '<self>';
 
     $content = substr($content, 0, $pos)
         . "\n\n"
-        . "# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>') . "\n"
+        . "# inserted by " . blessed($self) . ' ' . $self->VERSION . "\n"
         . join("\n", $self->raw)
         . "\n" . substr($content, $pos);
 
@@ -146,7 +145,7 @@ sub setup_installer
 
     if (my @include_subs = grep { not exists $included_subs{$_} } $self->_all_required_subs)
     {
-        $content .= "\n# inserted by " . blessed($self) . ' ' . ($self->VERSION || '<self>')
+        $content .= "\n# inserted by " . blessed($self) . ' ' . $self->VERSION
             if not keys %included_subs;
 
         if (my @missing_subs = grep { !-f path($self->_include_sub_root, $_) } @include_subs)
