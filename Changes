@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.010     2015-02-15 01:12:41Z (TRIAL RELEASE)
           - new -raw_from_file option, when content is too long to inline into
             dist.ini
           - new -include_sub option, to include definitions of commonly-used

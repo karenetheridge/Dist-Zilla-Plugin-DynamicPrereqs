@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.009
+version 0.010
 
 =head1 SYNOPSIS
 
@@ -16,14 +16,23 @@ In your F<dist.ini>:
 
     [DynamicPrereqs]
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
-    -raw = if eval { require Role::Tiny; 1 };
+    -raw = if can_use'(Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
+    -include_sub = can_use
+    -include_sub = parse_args
+    -include_sub = can_xs
 
 or:
 
     [DynamicPrereqs]
     -delimiter = |
     -raw = |$WriteMakefileArgs{TEST_REQUIRES}{'Devel::Cover'} = $FallbackPrereqs{'Devel::Cover'} = '0'
-    -raw = |    if $ENV{EXTENDED_TESTING};
+    -raw = |    if $ENV{EXTENDED_TESTING} or is_smoker();
+    -include_sub = is_smoker
+
+or:
+
+    [DynamicPrereqs]
+    -raw_from_file = Makefile.args      # code snippet in this file
 
 =head1 DESCRIPTION
 
@@ -71,7 +80,7 @@ If you use external libraries in the code you are inserting, you B<must> add
 these modules to C<configure_requires> prereqs in metadata (e.g. via
 C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
-=for Pod::Coverage mvp_multivalue_args mvp_aliases metadata after_build setup_installer
+=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build setup_installer register_prereqs
 
 =head2 C<-delimiter>
 
@@ -82,6 +91,56 @@ all C<-raw> lines. This is because the INI file format strips all leading
 whitespace from option values, so including this character at the front allows
 you to use leading whitespace in an option string, so you can indent blocks of
 code properly.
+
+=head2 C<-raw_from_file>
+
+(Available since version 0.010)
+
+A filename that contains the code to be inserted; must be valid and complete
+perl statements, as with C<-raw> above.  This file must be part of the build,
+but it is pruned from the built distribution.
+
+=head2 C<-include_sub>
+
+(Available since version 0.010)
+
+The name of a subroutine that you intend to call from the code inserted via
+C<-raw> or C<-raw_from_file>. Its definition will be included in
+F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
+modules will be added to C<configure requires> metadata.
+This option can be used more than once.
+
+Available subs are:
+
+=over 4
+
+=item * C<prompt_default_yes($message)> - takes a string (appending "[Y/n]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
+
+=item * C<prompt_default_no($message)> - takes a string (appending "[y/N]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
+
+=item * C<parse_args()> - returns the hashref of options that were passed as arguments to C<perl Makefile.PL>
+
+=item * C<can_xs()> - Secondary compile testing via ExtUtils::CBuilder
+
+=item * C<can_cc()> - can we locate a (the) C compiler
+
+=item * C<can_run()> - check if we can run some command
+
+=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded
+
+=item * C<is_smoker()> - is the installation on a smoker machine?
+
+=item * C<is_interactive()> - is the installation in an interactive terminal?
+
+=item * C<is_trial()> - is the release a -TRIAL or _XXX-versioned release?
+
+=item * C<is_os($os, ...)> - true if the OS is any of those listed
+
+=item * C<isnt_os($os, ...)> - true if the OS is none of those listed
+
+=item * C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >> (please keep using the fully-qualified form) to work in Cygwin
+
+=back
 
 =head1 WARNING: UNSTABLE API!
 
@@ -120,10 +179,6 @@ C<-build> a module and version that is added to build prereqs should the C<-cond
 
 =back
 
-It is also quite possible that there will be customized condition options,
-e.g. C<-can_xs>, that will automatically provide common subroutines for use in
-condition expressions.
-
 =head1 SUPPORT
 
 =for stopwords irc
@@ -151,6 +206,10 @@ L<Dist::Zilla::Plugin::OSPrereqs>
 =item *
 
 L<Dist::Zilla::Plugin::PerlVersionPrereqs>
+
+=item *
+
+L<Module::Install::Can>
 
 =back
 
