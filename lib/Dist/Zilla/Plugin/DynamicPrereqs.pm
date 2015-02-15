@@ -15,7 +15,7 @@ with
     'Dist::Zilla::Role::AfterBuild',
     'Dist::Zilla::Role::TextTemplate',
 ;
-use List::Util 1.33 qw(first notall);
+use List::Util 1.33 qw(first notall any);
 use Module::Runtime 'module_notional_filename';
 use Try::Tiny;
 use Path::Tiny;
@@ -55,21 +55,22 @@ has raw_from_file => (
     is => 'ro', isa => 'Str',
 );
 
-has include_subs => (
+has $_ => (
     isa => 'ArrayRef[Str]',
     traits => ['Array'],
-    handles => { include_subs => 'elements' },
+    handles => { $_ => 'elements' },
     lazy => 1,
     default => sub { [] },
-);
+) foreach qw(include_subs conditions);
 
-sub mvp_multivalue_args { qw(raw include_subs) }
+sub mvp_multivalue_args { qw(raw include_subs conditions) }
 
 sub mvp_aliases { +{
     '-raw' => 'raw',
     '-delimiter' => 'delimiter',
     '-raw_from_file' => 'raw_from_file',
     '-include_sub' => 'include_subs',
+    '-condition' => 'conditions',
 } }
 
 around BUILDARGS => sub
@@ -133,10 +134,18 @@ sub setup_installer
 
     my $pos = pos($content);
 
+    my $code = join("\n", $self->raw);
+    if (my $conditions = join(' && ', $self->conditions))
+    {
+        $code = "if ($conditions) {\n"
+            . $code . "\n"
+            . "}\n";
+    }
+
     $content = substr($content, 0, $pos)
         . "\n\n"
         . "# inserted by " . blessed($self) . ' ' . $self->VERSION . "\n"
-        . join("\n", $self->raw)
+        . $code
         . "\n" . substr($content, $pos);
 
     $content =~ s/\n+\z/\n/;
@@ -238,7 +247,17 @@ has _all_required_subs => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        [ sort $self->_all_required_subs_for($self->include_subs) ];
+        my @conditions = $self->conditions;
+        my @subs_in_conditions = !@conditions ? () :
+            grep {
+                my $sub_name = $_;
+                any { $_ =~ /$sub_name/ } @conditions
+            } map { $_->basename } path($self->_include_sub_root)->children;
+
+        [ sort(_uniq(
+            @subs_in_conditions,
+            $self->_all_required_subs_for($self->include_subs)
+        )) ];
     },
 );
 
@@ -273,6 +292,8 @@ sub _warn_include_subs
         foreach grep { exists $warn_include_sub{$_} } @include_subs;
 }
 
+sub _uniq { keys %{ +{ map { $_ => undef } @_ } } }
+
 __PACKAGE__->meta->make_immutable;
 __END__
 
@@ -283,11 +304,10 @@ __END__
 In your F<dist.ini>:
 
     [DynamicPrereqs]
+    -condition = has_module('Role::Tiny')
+    -condition = !parse_args()->{PUREPERL_ONLY}
+    -condition = can_xs()
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
-    -raw = if has_module('Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
-    -include_sub = has_module
-    -include_sub = parse_args
-    -include_sub = can_xs
 
 or:
 
@@ -368,6 +388,32 @@ A filename that contains the code to be inserted; must be valid and complete
 perl statements, as with C<-raw> above.  This file must be part of the build,
 but it is pruned from the built distribution.
 
+=head2 C<-condition>
+
+(Available since version 0.014)
+
+=for stopwords ANDed
+
+A perl expression to be included in the condition statement in the
+F<Makefile.PL>.  Multiple C<-condition>s can be provided, in which case they
+are ANDed together to form the final condition statement. (You must
+appropriately parenthesize each of your conditions to ensure correct order of
+operations.)  Any use of recognized subroutines will cause their definitions
+to be included automatically (see L<AVAILABLE SUBROUTINE DEFINITIONS>, below).
+
+When combined with C<-raw> lines, the condition is placed first in a C<if>
+statement, and the C<-raw> lines are contained as the body of the block. For example:
+
+    [DynamicPrereqs]
+    -condition = $] > '5.020'
+    -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+
+results in the F<Makefile.PL> snippet:
+
+    if ($] > '5.020') {
+    $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+    }
+
 =head2 C<-include_sub>
 
 (Available since version 0.010)
@@ -376,7 +422,8 @@ The name of a subroutine that you intend to call from the code inserted via
 C<-raw> or C<-raw_from_file>. Its definition will be included in
 F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
 modules will be added to C<configure requires> metadata.
-This option can be used more than once.
+This option can be used more than once. See L</AVAILABLE SUBROUTINE
+DEFINITIONS> for the complete list of sub names that can be requested.
 
 =head1 AVAILABLE SUBROUTINE DEFINITIONS
 
@@ -438,7 +485,6 @@ interface changes.
 Future options may include:
 
 =for :list
-* C<-condition> a Perl expression that is tested before additional prereqs are added
 * C<-phase> the phase in which subsequently-specified module/version pairs will be added
 * C<-runtime> a module and version that is added to runtime prereqs should the C<-condition> be satisfied
 * C<-test> a module and version that is added to test prereqs should the C<-condition> be satisfied
