@@ -46,7 +46,7 @@ ok(-e $file, 'Makefile.PL created');
 my $makefile = $file->slurp_utf8;
 unlike($makefile, qr/[^\S\n]\n/m, 'no trailing whitespace in modified file');
 
-my $version = Dist::Zilla::Plugin::DynamicPrereqs->VERSION || '<self>';
+my $version = Dist::Zilla::Plugin::DynamicPrereqs->VERSION;
 isnt(
     index(
         $makefile,
