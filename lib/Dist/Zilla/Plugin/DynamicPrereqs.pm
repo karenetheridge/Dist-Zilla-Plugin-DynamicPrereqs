@@ -261,7 +261,7 @@ In your F<dist.ini>:
 
     [DynamicPrereqs]
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
-    -raw = if can_use'(Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
+    -raw = if can_use('Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
     -include_sub = can_use
     -include_sub = parse_args
     -include_sub = can_xs
