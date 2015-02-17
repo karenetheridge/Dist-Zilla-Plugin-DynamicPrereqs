@@ -6,5 +6,5 @@ sub can_cc {
     return can_run("@chunks") || (pop(@chunks), next);
   }
 
-  return;
+  return 0;
 }
