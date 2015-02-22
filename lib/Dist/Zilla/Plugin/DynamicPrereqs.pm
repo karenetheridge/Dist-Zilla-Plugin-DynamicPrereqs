@@ -389,11 +389,13 @@ Available subs are:
 
 =head1 WARNING: UNSTABLE API!
 
-=for stopwords DarkPAN
+=for stopwords DarkPAN metacpan
 
 This plugin is still undergoing active development, and the interfaces B<will>
 change and grow as I work through the proper way to do various things.  As I
-make changes, I will be using L<http://grep.cpan.me> to find and fix any
+make changes, I will be using
+L<metacpan's reverse dependencies list|https://metacpan.org/requires/distribution/Dist-Zilla-Plugin-DynamicPrereqs>
+and L<http://grep.cpan.me> to find and fix any
 upstream users, but I obviously cannot do this for DarkPAN users. Regardless,
 please contact me (see below) and I will keep you directly advised of
 interface changes.
