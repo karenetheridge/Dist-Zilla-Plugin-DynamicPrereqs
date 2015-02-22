@@ -371,7 +371,7 @@ Available subs are:
 
 =item * C<can_run()> - check if we can run some command
 
-=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded
+=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< MM->parse_version($file) >>.)
 
 =item * C<is_smoker()> - is the installation on a smoker machine?
 
