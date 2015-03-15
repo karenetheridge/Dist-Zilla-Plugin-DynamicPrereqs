@@ -53,4 +53,7 @@ cmp_deeply(
 
 run_makemaker($tzil);
 
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
+
 done_testing;
