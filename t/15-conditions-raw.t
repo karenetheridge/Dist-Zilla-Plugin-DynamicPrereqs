@@ -22,11 +22,11 @@ my $tzil = Builder->from_config(
                 [ MakeMaker => ],
                 [ DynamicPrereqs => {
                         -condition => [
-                            q|can_use('Test::More')|,
+                            q|can_run('perlmagick')|,
                             '1 == 2',
                         ],
                         -raw => [
-                            q|$WriteMakefileArgs{PREREQ_PM}{'Test::More'} = $FallbackPrereqs{'Test::More'} = '0.123';|,
+                            q|$WriteMakefileArgs{PREREQ_PM}{'Image::Magick'} = $FallbackPrereqs{'Image::Magick'} = '0.123';|,
                         ],
                     },
                 ],
@@ -57,8 +57,8 @@ isnt(
         $makefile,
         <<CONTENT),
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
-if (can_use('Test::More') && 1 == 2) {
-\$WriteMakefileArgs{PREREQ_PM}{'Test::More'} = \$FallbackPrereqs{'Test::More'} = '0.123';
+if (can_run('perlmagick') && 1 == 2) {
+\$WriteMakefileArgs{PREREQ_PM}{'Image::Magick'} = \$FallbackPrereqs{'Image::Magick'} = '0.123';
 }
 
 CONTENT
@@ -72,8 +72,11 @@ my $expected_subs = <<CONTENT;
 __DEFINITION__
 CONTENT
 
-my $definition = path(File::ShareDir::module_dir('Dist::Zilla::Plugin::DynamicPrereqs'), 'include_subs', 'can_use')->slurp_utf8;
-$expected_subs =~ s/__DEFINITION__\n/$definition/;
+my $definitions = join("\n",
+    map { path(File::ShareDir::module_dir('Dist::Zilla::Plugin::DynamicPrereqs'), 'include_subs', $_)->slurp_utf8 }
+    sort qw(can_run maybe_command)
+);
+$expected_subs =~ s/__DEFINITION__\n/$definitions/;
 
 my $included_subs_index = index($makefile, $expected_subs);
 isnt(

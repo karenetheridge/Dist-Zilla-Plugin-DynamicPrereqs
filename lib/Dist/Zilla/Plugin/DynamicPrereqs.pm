@@ -254,10 +254,9 @@ has _all_required_subs => (
                 any { $_ =~ /$sub_name/ } @conditions
             } map { $_->basename } path($self->_include_sub_root)->children;
 
-        [ sort(_uniq(
-            @subs_in_conditions,
-            $self->_all_required_subs_for($self->include_subs)
-        )) ];
+        [ sort($self->_all_required_subs_for(_uniq(
+            $self->include_subs, @subs_in_conditions
+        ))) ];
     },
 );
 
