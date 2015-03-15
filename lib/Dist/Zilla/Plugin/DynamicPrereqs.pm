@@ -355,6 +355,8 @@ F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
 modules will be added to C<configure requires> metadata.
 This option can be used more than once.
 
+=head1 AVAILABLE SUBROUTINE DEFINITIONS
+
 Available subs are:
 
 =over 4
