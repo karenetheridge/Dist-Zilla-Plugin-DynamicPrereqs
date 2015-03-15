@@ -61,16 +61,26 @@ has $_ => (
     handles => { $_ => 'elements' },
     lazy => 1,
     default => sub { [] },
+<<<<<<< Updated upstream
 ) foreach qw(include_subs conditions);
 
 sub mvp_multivalue_args { qw(raw include_subs conditions) }
+=======
+) foreach qw(include_subs conditional);
+
+sub mvp_multivalue_args { qw(raw include_subs conditional) }
+>>>>>>> Stashed changes
 
 sub mvp_aliases { +{
     '-raw' => 'raw',
     '-delimiter' => 'delimiter',
     '-raw_from_file' => 'raw_from_file',
     '-include_sub' => 'include_subs',
+<<<<<<< Updated upstream
     '-condition' => 'conditions',
+=======
+    '-conditional' => 'conditional',
+>>>>>>> Stashed changes
 } }
 
 around BUILDARGS => sub
@@ -136,11 +146,17 @@ sub setup_installer
     my $version = $self->VERSION || '<self>';
 
     my $code = join("\n", $self->raw);
+<<<<<<< Updated upstream
     if (my $conditions = join(' && ', $self->conditions))
     {
         $code = "if ($conditions) {\n"
             . $code . "\n"
             . "}\n";
+=======
+    if (my $conditions = $self->conditions)
+    {
+        $code = $conditions . "\n"
+>>>>>>> Stashed changes
     }
 
     $content = substr($content, 0, $pos)
@@ -369,9 +385,15 @@ but it is pruned from the built distribution.
 
 (Available since version 0.011)
 
+<<<<<<< Updated upstream
 A perl expression to be included in the condition statement in the
 F<Makefile.PL>.  Multiple C<-condition>s can be provided, in which case they
 are ANDed together to form the final condition statement. (You must
+=======
+A perl expression to be included in the conditional statement in the
+F<Makefile.PL>.  Multiple C<-condition>s can be provided, in which case they
+are ANDed together to form the final conditional statement. (You must
+>>>>>>> Stashed changes
 appropriately parenthesize each of your conditions to ensure correct order of
 operations.)  Any use of recognized subroutines will cause their definitions
 to be included automatically (see L<AVAILABLE SUBROUTINE DEFINITIONS>, below).
@@ -380,6 +402,7 @@ When combined with C<-raw> lines, the condition is placed first in a C<if>
 statement, and the C<-raw> lines are contained as the body of the block. For example:
 
     [DynamicPrereqs]
+<<<<<<< Updated upstream
     -condition = $] > '5.020'
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
 
@@ -388,6 +411,14 @@ Results in the F<Makefile.PL> snippet:
     if ($] > '5.020') {
     $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
     }
+=======
+    -condition = can_use('Role::Tiny')
+    -condition = !parse_args()->{PUREPERL_ONLY}
+    -condition = can_xs()
+    -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+
+
+>>>>>>> Stashed changes
 
 =head2 C<-include_sub>
 
