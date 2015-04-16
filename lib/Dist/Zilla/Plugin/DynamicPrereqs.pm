@@ -22,6 +22,7 @@ use Path::Tiny;
 use File::ShareDir;
 use namespace::autoclean;
 use feature 'state';
+use Term::ANSIColor 3.00 'colored';
 
 has raw => (
     isa => 'ArrayRef[Str]',
@@ -157,6 +158,10 @@ sub setup_installer
             );
         }
 
+        # On consultation with ribasushi I agree that we cannot let authors
+        # use some sub definitions without copious danger tape.
+        $self->_warn_include_subs(@include_subs);
+
         my @sub_definitions = map { path($self->_include_sub_root, $_)->slurp_utf8 } @include_subs;
         $content .= "\n"
             . $self->fill_in_string(
@@ -248,6 +253,20 @@ sub _all_required_subs_for
     }
 
     return keys %required_subs;
+}
+
+my %warn_include_sub = (
+    can_xs => 1,
+    can_cc => 1,
+    can_run => 1,
+);
+
+sub _warn_include_subs
+{
+    my ($self, @include_subs) = @_;
+
+    $self->log(colored('The use of ' . $_ . ' is not advised. Please consult the documentation!', 'bright_yellow'))
+        foreach grep { exists $warn_include_sub{$_} } @include_subs;
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -388,6 +407,14 @@ Available subs are:
 =item * C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >> (please keep using the fully-qualified form) to work in Cygwin
 
 =back
+
+=head1 WARNING: INCOMPLETE SUBROUTINE IMPLEMENTATIONS!
+
+The implementations for some subroutines (in particular, C<can_xs>, C<can_cc>
+and C<can_run> are still incomplete, incompatible with some architectures and
+cannot yet be considered a suitable generic solution. Until we are more
+confident in their implementations, a warning will be printed upon use, and
+their use B<is not advised> without prior consultation with the author.
 
 =head1 WARNING: UNSTABLE API!
 

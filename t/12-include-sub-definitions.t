@@ -7,6 +7,7 @@ use Test::DZil;
 use Test::Fatal;
 use Path::Tiny;
 use Test::Deep;
+use Term::ANSIColor 2.01 'colorstrip';
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
 # this time, we use our real sub definitions
@@ -40,6 +41,14 @@ is(
     exception { $tzil->build },
     undef,
     'build proceeds normally',
+);
+
+cmp_deeply(
+    [ map { colorstrip($_) } @{ $tzil->log_messages } ],
+    supersetof(
+        map { re(qr/^\Q[DynamicPrereqs] The use of $_ is not advised. Please consult the documentation!\E$/) } qw(can_cc can_run can_xs),
+    ),
+    'warning printed for unstable sub implementations',
 ) or diag 'got log messages: ', explain $tzil->log_messages;
 
 my $build_dir = path($tzil->tempdir)->child('build');

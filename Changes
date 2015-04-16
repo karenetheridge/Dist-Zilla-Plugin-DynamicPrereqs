@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - warn whenever can_xs, can_cc, or can_run is used, until
+            implementation concerns are resolved
 
 0.010     2015-02-15 01:12:41Z (TRIAL RELEASE)
           - new -raw_from_file option, when content is too long to inline into
