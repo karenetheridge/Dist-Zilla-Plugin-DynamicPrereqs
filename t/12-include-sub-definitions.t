@@ -66,6 +66,8 @@ cmp_deeply(
                     'File::Spec' => 0,
                     'File::Temp' => '0',
                     'Text::ParseWords' => '0',
+                    'Module::Metadata' => '0',
+                    'CPAN::Meta::Requirements' => '2.120620',
                 },
             },
         },

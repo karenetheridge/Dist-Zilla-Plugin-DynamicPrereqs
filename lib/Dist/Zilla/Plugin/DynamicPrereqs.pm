@@ -193,6 +193,10 @@ my %sub_prereqs = (
     parse_args => {
         'Text::ParseWords' => '0',
     },
+    has_module => {
+        'Module::Metadata' => '0',
+        'CPAN::Meta::Requirements' => '2.120620',   # for add_string_requirement
+    },
 );
 
 sub register_prereqs
@@ -280,8 +284,8 @@ In your F<dist.ini>:
 
     [DynamicPrereqs]
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
-    -raw = if can_use('Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
-    -include_sub = can_use
+    -raw = if has_module('Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
+    -include_sub = has_module
     -include_sub = parse_args
     -include_sub = can_xs
 
@@ -392,7 +396,9 @@ Available subs are:
 
 =item * C<can_run()> - check if we can run some command
 
-=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< MM->parse_version($file) >>.)
+=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
+
+=item * C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.
 
 =item * C<is_smoker()> - is the installation on a smoker machine?
 
