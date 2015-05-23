@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.010
+version 0.011
 
 =head1 SYNOPSIS
 
@@ -16,8 +16,8 @@ In your F<dist.ini>:
 
     [DynamicPrereqs]
     -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
-    -raw = if can_use'(Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
-    -include_sub = can_use
+    -raw = if has_module('Role::Tiny') and !parse_args()->{PUREPERL_ONLY} and can_xs();
+    -include_sub = has_module
     -include_sub = parse_args
     -include_sub = can_xs
 
@@ -110,6 +110,8 @@ F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
 modules will be added to C<configure requires> metadata.
 This option can be used more than once.
 
+=head1 AVAILABLE SUBROUTINE DEFINITIONS
+
 Available subs are:
 
 =over 4
@@ -126,7 +128,9 @@ Available subs are:
 
 =item * C<can_run()> - check if we can run some command
 
-=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded
+=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
+
+=item * C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.
 
 =item * C<is_smoker()> - is the installation on a smoker machine?
 
@@ -142,13 +146,23 @@ Available subs are:
 
 =back
 
+=head1 WARNING: INCOMPLETE SUBROUTINE IMPLEMENTATIONS!
+
+The implementations for some subroutines (in particular, C<can_xs>, C<can_cc>
+and C<can_run> are still incomplete, incompatible with some architectures and
+cannot yet be considered a suitable generic solution. Until we are more
+confident in their implementations, a warning will be printed upon use, and
+their use B<is not advised> without prior consultation with the author.
+
 =head1 WARNING: UNSTABLE API!
 
-=for stopwords DarkPAN
+=for stopwords DarkPAN metacpan
 
 This plugin is still undergoing active development, and the interfaces B<will>
 change and grow as I work through the proper way to do various things.  As I
-make changes, I will be using L<http://grep.cpan.me> to find and fix any
+make changes, I will be using
+L<metacpan's reverse dependencies list|https://metacpan.org/requires/distribution/Dist-Zilla-Plugin-DynamicPrereqs>
+and L<http://grep.cpan.me> to find and fix any
 upstream users, but I obviously cannot do this for DarkPAN users. Regardless,
 please contact me (see below) and I will keep you directly advised of
 interface changes.
