@@ -1,0 +1,137 @@
+
+
+lots of stuff in stashes...
+
+branches:
+  topic/conditional
+  topic/requires_options
+
+
+-----------------
+
+
+- -conditional option
+- -runtime, -test, -build options
+
+
+; patch MI::Can, Devel::CheckBin with updates that I develop here.
+    (or ensure they depend on fixed versions - maybe_command needs 6.51_01, 6.69_04)
+
+
+check implementation of Devel::CheckBin vs. File::Which and ensure we are
+using the best one; document the differences:
+https://rt.cpan.org/Ticket/Display.html?id=101893
+
+
+----------------
+
+include_subs definitions:
+
+ - B-Hooks-EndOfScope, ribasushi
+    for...
+ - https://metacpan.org/source/HAARG/Devel-GlobalDestruction-0.13/Makefile.PL#L121
+
+- can_xs (or the high level wrapper) etc needs to also check parse_args->{PUREPERLONLY} [sp] and never
+allow xs installations if this is set.
+    -> use leont's ExtUtils::HasCompiler, when written.
+
+
+---------------
+
+
+check out these subs in Module::Install, as in https://metacpan.org/source/GFUJI/Data-Util-0.63/Makefile.PL:
+    if(want_xs()){
+        use_xshelper;
+        cc_warnings;
+        cc_define '-DINLINE_STR_EQ';
+    }
+    else{
+        requires 'Hash::Util::FieldHash::Compat';
+    }
+
+----------------
+
+ * then can implement -conditional and -runtime_requires syntax later.
+
+
+ -conditional = ...  all lines ANDed together
+ -conditional = !can_use('Foo::Bar', '1.23') && prompt_default_yes('install Foo::Bar?')
+ -runtime_requires = ...
+ Module::Name = 1.0   (equivalent to -runtime_requires)
+ -test_requires = ...
+ -build_requires = ...
+ -configure_requires = ... *ERROR*
+ explicitly document that recommends, suggests are not supported and not a
+ good idea to insert dynamically anyway (although we could, with lots of
+ META_MERGE/META_ADD black magic -- so not recommended)
+
+ subs are automatically included in footer of Makefile.PL as needed.
+ but if the lines are defined with -raw, you need to signal them to be
+ included:     (fatal error if sub is not known)
+ -include_sub = can_xs
+ -include_sub = prompt_default_yes
+
+ methods not yet defined:
+ has_compiler()
+
+
+can combine -conditions, -raw and *requires.  requires just adds more raw content,
+that gets wrapped with the conditional.
+
+
+---------------
+
+
+ *** who are the customers for this?
+ - B-Hooks-EndOfScope
+ - https://metacpan.org/source/HAARG/Devel-GlobalDestruction-0.13/Makefile.PL#L121
+ - anything using DynamicPrereqs today
+ - search for can_xs, can_cc in grep.cpan.me
+ - Moose
+
+ TODO:
+ when adding TEST_REQUIRES, inject a configure-requires for EUMM 6.63_03
+ check for other minimums too.
+
+
+ all known users of [MakeMaker::Custom]:
+ ETHER/B-Hooks-EndOfScope
+ https://metacpan.org/release/CJM/PostScript-Report-0.13
+ https://metacpan.org/release/CJM/PostScript-ScheduleGrid-0.04
+ https://metacpan.org/release/CJM/Win32-Setupsup-1.12
+ https://metacpan.org/release/GNUSTAVO/Git-Hooks-1.6.1
+ https://metacpan.org/release/GNUSTAVO/SVN-Look-0.41
+ https://metacpan.org/release/JWANG/Encode-HP-0.03
+ https://metacpan.org/release/JWANG/Encode-VN-0.06
+ https://metacpan.org/release/KAMENSKY/Text-Bidi-2.09
+ https://metacpan.org/release/NYAKNYAN/MongoDB-Async-0.702.3
+ https://metacpan.org/release/PLICEASE/App-RegexFileUtils-0.06
+ https://metacpan.org/release/PLICEASE/File-Listing-Ftpcopy-0.05
+ https://metacpan.org/release/RTWARD/Hg-0.003
+
+
+
+
+
+Getty wants a cpanfile (with the dynamic prereqs) to be generated.
+ok, sure, I can do that by appending to an existing cpanfile if one is created
+in the dist...
+can do this by swapping out the FromCode sub with a method modified one.
+
+13:40 < Getty> we have a lot of dzil plugin which have capabilities i would
+like indepedent
+13:46 < ether> I can't do cpanfile stuff with the current [DynamicPrereqs], as
+the code is still specified raw, for direct insertion into Makefile.PL, but in
+the future I'll support things like:
+13:46 < ether> [DynamicPrereqs]
+13:46 < ether> -condition is_os(mswin32)
+13:46 < ether> -condition is_perl(>=5.12)
+13:46 < ether> -runtimerequires = Foo::Bar 1.0
+13:46 < ether> etc
+13:46 < ether> and that's easily translatable into cpanfile snippets too
+13:46 < leont> This sounds like a cpanfile, except not turing-complete ;-)
+13:47 < ether> heh, yeah, kinda like how the syntax *should* have been :D
+
+
+
+
