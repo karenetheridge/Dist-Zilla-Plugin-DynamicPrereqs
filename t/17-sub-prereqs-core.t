@@ -4,7 +4,7 @@ use warnings;
 use Test::More;
 use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use PadWalker 'closed_over';
-use Module::CoreList;
+use Module::CoreList 2.63;  # new enough to know about 5.15.9, needed for CMR 2.120620
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
 # test that all prereqs are dual-life - that is, we do not ever add a
