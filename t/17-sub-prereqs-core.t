@@ -12,7 +12,7 @@ use Dist::Zilla::Plugin::DynamicPrereqs;
 
 my $latest_release = (reverse sort keys %Module::CoreList::released)[0];
 
-my $sub_prereqs = closed_over('Dist::Zilla::Plugin::DynamicPrereqs::register_prereqs')->{'%sub_prereqs'};
+my $sub_prereqs = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::register_prereqs)->{'%sub_prereqs'};
 foreach my $sub (keys %$sub_prereqs)
 {
     foreach my $module (keys %{$sub_prereqs->{$sub}})

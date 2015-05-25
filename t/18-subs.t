@@ -11,7 +11,7 @@ use Dist::Zilla::Plugin::DynamicPrereqs;
 use Test::File::ShareDir
     -share => { -module => { 'Dist::Zilla::Plugin::DynamicPrereqs' => 'share/DynamicPrereqs' } };
 
-my $sub_prereqs = closed_over('Dist::Zilla::Plugin::DynamicPrereqs::register_prereqs')->{'%sub_prereqs'};
+my $sub_prereqs = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::register_prereqs)->{'%sub_prereqs'};
 
 sub load_sub
 {
