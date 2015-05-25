@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
+{{$NEXT}}
+
 0.012     2015-05-25 00:47:09Z
           - fix test failure with PadWalker on older perls
 
