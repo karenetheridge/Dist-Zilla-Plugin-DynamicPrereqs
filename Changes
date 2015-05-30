@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.013     2015-05-30 19:16:03Z
           - require a new enough Module::CoreList in tests to ensure is_core()
             is available
 
