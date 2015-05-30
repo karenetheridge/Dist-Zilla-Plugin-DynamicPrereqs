@@ -5,7 +5,7 @@ package Dist::Zilla::Plugin::DynamicPrereqs;
 # KEYWORDS: plugin distribution metadata MYMETA prerequisites Makefile.PL dynamic
 # vim: set ts=8 sts=4 sw=4 tw=78 et :
 
-our $VERSION = '0.013';
+our $VERSION = '0.014';
 
 use Moose;
 with
