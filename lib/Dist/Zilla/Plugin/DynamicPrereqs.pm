@@ -39,7 +39,7 @@ has raw => (
             $self->log_fatal([ 'no such file in build: %s' ], $filename) if not $file;
             $self->zilla->prune_file($file);
             try {
-                @lines = split("\n", $file->content);
+                @lines = split(/\n/, $file->content);
             }
             catch {
                 $self->log_fatal($_);
