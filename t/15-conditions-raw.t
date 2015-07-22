@@ -25,8 +25,9 @@ my $tzil = Builder->from_config(
                             q|can_run('perlmagick')|,
                             '1 == 2',
                         ],
+                        '-delimiter' => '+',
                         -raw => [
-                            q|$WriteMakefileArgs{PREREQ_PM}{'Image::Magick'} = $FallbackPrereqs{'Image::Magick'} = '0.123';|,
+                            q|+  $WriteMakefileArgs{PREREQ_PM}{'Image::Magick'} = $FallbackPrereqs{'Image::Magick'} = '0.123';|,
                         ],
                     },
                 ],
@@ -58,7 +59,7 @@ isnt(
         <<CONTENT),
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 if (can_run('perlmagick') && 1 == 2) {
-\$WriteMakefileArgs{PREREQ_PM}{'Image::Magick'} = \$FallbackPrereqs{'Image::Magick'} = '0.123';
+  \$WriteMakefileArgs{PREREQ_PM}{'Image::Magick'} = \$FallbackPrereqs{'Image::Magick'} = '0.123';
 }
 
 CONTENT
