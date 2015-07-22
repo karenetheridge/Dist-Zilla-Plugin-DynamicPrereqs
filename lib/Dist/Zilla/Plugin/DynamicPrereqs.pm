@@ -139,14 +139,14 @@ sub setup_installer
     {
         $code = "if ($conditions) {\n"
             . $code . "\n"
-            . "}\n";
+            . '}';
     }
 
     $content = substr($content, 0, $pos)
         . "\n\n"
         . "# inserted by " . blessed($self) . ' ' . $self->VERSION . "\n"
         . $code
-        . "\n" . substr($content, $pos);
+        . substr($content, $pos);
 
     $content =~ s/\n+\z/\n/;
 
