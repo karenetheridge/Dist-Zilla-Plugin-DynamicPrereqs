@@ -2,8 +2,8 @@ sub has_module {
   my ($module, $version_or_range) = @_;
   require Module::Metadata;
   my $mmd = Module::Metadata->new_from_module($module);
-  return 0 if not $mmd;
-  return 1 if not defined $version_or_range;
+  return undef if not $mmd;
+  return $mmd->version($module) if not defined $version_or_range;
 
   require CPAN::Meta::Requirements;
   my $req = CPAN::Meta::Requirements->new;

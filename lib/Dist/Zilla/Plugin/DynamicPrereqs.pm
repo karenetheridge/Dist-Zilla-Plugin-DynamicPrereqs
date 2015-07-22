@@ -444,7 +444,7 @@ Available subs are:
 
 =item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
 
-=item * C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded. (Available since version 0.011.)
+=item * C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded. When passed a second argument, returns true or false; otherwise, returns undef or the module's C<$VERSION>. (Current API available since version 0.015.)
 
 =item * C<is_smoker()> - is the installation on a smoker machine?
 

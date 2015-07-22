@@ -6,6 +6,7 @@ use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Path::Tiny;
 use PadWalker 'closed_over';
 use Module::Runtime qw(use_module module_notional_filename);
+use ExtUtils::MakeMaker;
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
 use Test::File::ShareDir
@@ -28,23 +29,28 @@ sub load_sub
     {
         # pick something we know is available, but not something we have loaded
         my $module = 'CPAN';
+
         ok(!exists($INC{module_notional_filename($module)}), "$module has not already been loaded");
-        is(has_module($module), 1, "$module is installed");
+        my $got_version;
+        ok($got_version = has_module($module), "$module is installed; returned something true");
         is(has_module($module, '0'), 1, "$module is installed at least version 0");
         ok(!exists($INC{module_notional_filename($module)}), "$module has not been loaded by has_module()");
+
+        require CPAN;
+        is($got_version, MM->parse_version($INC{'CPAN.pm'}), 'has_version returned $CPAN::VERSION');
     }
 
     {
         my $module = 'Bloop::Blorp';
         ok(!exists($INC{module_notional_filename($module)}), "$module has not already been loaded");
-        is(has_module($module), 0, "$module is not installed");
+        is(has_module($module), undef, "$module is not installed");
         ok(!exists($INC{module_notional_filename($module)}), "$module has not been loaded by has_module()");
     }
 
     {
         my $module = 'Dist::Zilla::Plugin::DynamicPrereqs';
         ok(exists($INC{module_notional_filename($module)}), "$module has already been loaded");
-        is(has_module($module), 1, "$module is installed");
+        is(has_module($module), $module->VERSION, "$module is installed; returned its version");
         is(has_module($module, '0'), 1, "$module is installed at least version 0");
         is(has_module($module, $module->VERSION), 1, "$module is installed at least version " . $module->VERSION);
     }

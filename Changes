@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - has_module($module) now returns the $VERSION of the installed
+            module, or undef otherwise, if a second argument is not passed
 
 0.014     2015-07-22 02:41:49Z
           - new '-condition' option, as sugar to provide expressions to be
