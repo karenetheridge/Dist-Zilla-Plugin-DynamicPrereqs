@@ -1,5 +1,4 @@
 
-
 lots of stuff in stashes...
 
 branches:
@@ -36,6 +35,36 @@ allow xs installations if this is set.
     -> use leont's ExtUtils::HasCompiler, when written.
 
 
+new sub: is_perl_version, or has_perl -- which checks $]
+document teh format expected of the argument
+
+20:06 <@ether> . o O ( if you were calling a helper sub that checked $], would you rather: is_perl_version('5.008001'), or has_perl('5.008001')? )
+20:07 < genehack> are those exact comparisons?
+20:07 < genehack> because otherwise i might lean towards perl_greater_than()
+20:09 <@ether> true, the first one is ambiguous
+20:09 <@ether> they'd map to  $] >= $_[0]
+20:10 <@ether> so it would ahve to be perl_greater_than_or_equal_to(), at which point most people are going to just use $] :)
+20:10  * ether will sleep on has_perl()
+20:14 < genehack> is_perl_this_big()
+20:14 < Grinnz> is_perl_tall_enough_to_go_on_this_ride()
+20:14 < genehack> more seriously, is_perl_at_least()
+20:16 < Grinnz> no google autocomplete suggestions for "is perl at least" :(
+20:17 < Grinnz> "is perl at least gonna drive me home"
+20:45 <@ether> perl is my designated driver
+20:53  * jberger checks key for ether's cabinets
+01:03 <@kentnl> ether: perl_cmp("gte", "5.008001" ) ?
+01:03 <@kentnl> or just perl_gte()  will work
+01:05 <@kentnl> alternatively, do a CPS with a bless
+01:05 <@kentnl> lol. no.
+01:07 <@kentnl> perl_newer_than("5.008001") # >= 5.008001, perl_older_than("5.008001") # <= 5.008001
+02:47 <@dolmen> ether: use Test::Is 'perl v5.8.1';
+02:48 <@dolmen> ether: anyway, a test against $] should be evaluated at compile time, so the compilation can directly inline the right block
+02:50 <@dolmen> ether: use constant IS_PERL_MIN_5_8_1 => $] >= 5.008001;
+
+^^^ we want to generate a constant sub here with the argument baked in, for proper folding.
+^^^ do the same for $^O checks as well!
+
+
 ---------------
 
 
@@ -49,13 +78,18 @@ check out these subs in Module::Install, as in https://metacpan.org/source/GFUJI
         requires 'Hash::Util::FieldHash::Compat';
     }
 
+
+when we add -requires, it needs to sanely merge with existing prereqs,
+using CPAN::Meta::Requirements.
+make this optional: -merge_requires = ...
+so we don't always force a configure-requires on CMR.
+
+
 ----------------
 
  * then can implement -conditional and -runtime_requires syntax later.
 
 
- -conditional = ...  all lines ANDed together
- -conditional = !can_use('Foo::Bar', '1.23') && prompt_default_yes('install Foo::Bar?')
  -runtime_requires = ...
  Module::Name = 1.0   (equivalent to -runtime_requires)
  -test_requires = ...
@@ -65,11 +99,6 @@ check out these subs in Module::Install, as in https://metacpan.org/source/GFUJI
  good idea to insert dynamically anyway (although we could, with lots of
  META_MERGE/META_ADD black magic -- so not recommended)
 
- subs are automatically included in footer of Makefile.PL as needed.
- but if the lines are defined with -raw, you need to signal them to be
- included:     (fatal error if sub is not known)
- -include_sub = can_xs
- -include_sub = prompt_default_yes
 
  methods not yet defined:
  has_compiler()
