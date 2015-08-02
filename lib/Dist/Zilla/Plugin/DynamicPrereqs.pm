@@ -428,37 +428,49 @@ DEFINITIONS> for the complete list of sub names that can be requested.
 
 Available subs are:
 
-=over 4
+=begin :list
 
-=item * C<prompt_default_yes($message)> - takes a string (appending "[Y/n]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
+* C<prompt_default_yes($message)> - takes a string (appending "[Y/n]" to
+  it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
 
-=item * C<prompt_default_no($message)> - takes a string (appending "[y/N]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
+* C<prompt_default_no($message)> - takes a string (appending "[y/N]" to
+  it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
 
-=item * C<parse_args()> - returns the hashref of options that were passed as arguments to C<perl Makefile.PL>
+* C<parse_args()> - returns the hashref of options that were passed as
+  arguments to C<perl Makefile.PL>
 
-=item * C<can_xs()> - Secondary compile testing via ExtUtils::CBuilder
+* C<can_xs()> - Secondary compile testing via ExtUtils::CBuilder
 
-=item * C<can_cc()> - can we locate a (the) C compiler
+* C<can_cc()> - can we locate a (the) C compiler
 
-=item * C<can_run()> - check if we can run some command
+* C<can_run()> - check if we can run some command
 
-=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
+* C<can_use($module, $version (optional))> - checks if a module
+  (optionally, at a specified version) can be loaded. (If you don't want to load
+  the module, you should use C<< has_module >>, see below.)
 
-=item * C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded. When passed a second argument, returns true or false; otherwise, returns undef or the module's C<$VERSION>. (Current API available since version 0.015.)
+* C<has_module($module, $version_or_range (optional))> - checks if a module
+  (optionally, at a specified version or matching a L<version
+  range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not
+  load the module, so is safe to use with modules that have side effects when
+  loaded.  When passed a second argument, returns true or false; otherwise,
+  returns undef or the module's C<$VERSION>. (Current API available since
+  version 0.015.)
 
-=item * C<is_smoker()> - is the installation on a smoker machine?
+* C<is_smoker()> - is the installation on a smoker machine?
 
-=item * C<is_interactive()> - is the installation in an interactive terminal?
+* C<is_interactive()> - is the installation in an interactive terminal?
 
-=item * C<is_trial()> - is the release a -TRIAL or _XXX-versioned release?
+* C<is_trial()> - is the release a -TRIAL or _XXX-versioned release?
 
-=item * C<is_os($os, ...)> - true if the OS is any of those listed
+* C<is_os($os, ...)> - true if the OS is any of those listed
 
-=item * C<isnt_os($os, ...)> - true if the OS is none of those listed
+* C<isnt_os($os, ...)> - true if the OS is none of those listed
 
-=item * C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >> (please keep using the fully-qualified form) to work in Cygwin
+* C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >>
+  (please keep using the fully-qualified form) to work in Cygwin
 
-=back
+=end :list
 
 =head1 WARNING: INCOMPLETE SUBROUTINE IMPLEMENTATIONS!
 
