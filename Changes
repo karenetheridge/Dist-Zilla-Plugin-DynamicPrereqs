@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
+{{$NEXT}}
+
 0.015     2015-08-21 23:49:23Z
           - has_module($module) now returns the $VERSION of the installed
             module, or undef otherwise, if a second argument is not passed
