@@ -415,7 +415,7 @@ results in the F<Makefile.PL> snippet:
 
 =head2 C<-include_sub>
 
-(Available since version 0.010)
+(Available since version 0.010; some subs have been added later, as noted)
 
 The name of a subroutine that you intend to call from the code inserted via
 C<-raw> or C<-raw_from_file>. Its definition will be included in
@@ -444,7 +444,7 @@ Available subs are:
 
 =item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
 
-=item * C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.
+=item * C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded. (Available since version 0.011.)
 
 =item * C<is_smoker()> - is the installation on a smoker machine?
 
