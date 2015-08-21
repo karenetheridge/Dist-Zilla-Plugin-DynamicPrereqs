@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.014
+version 0.015
 
 =head1 SYNOPSIS
 
@@ -127,7 +127,7 @@ results in the F<Makefile.PL> snippet:
 
 =head2 C<-include_sub>
 
-(Available since version 0.010)
+(Available since version 0.010; some subs have been added later, as noted)
 
 The name of a subroutine that you intend to call from the code inserted via
 C<-raw> or C<-raw_from_file>. Its definition will be included in
@@ -142,33 +142,61 @@ Available subs are:
 
 =over 4
 
-=item * C<prompt_default_yes($message)> - takes a string (appending "[Y/n]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
+=item *
 
-=item * C<prompt_default_no($message)> - takes a string (appending "[y/N]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
+C<prompt_default_yes($message)> - takes a string (appending "[Y/n]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
 
-=item * C<parse_args()> - returns the hashref of options that were passed as arguments to C<perl Makefile.PL>
+=item *
 
-=item * C<can_xs()> - Secondary compile testing via ExtUtils::CBuilder
+C<prompt_default_no($message)> - takes a string (appending "[y/N]" to it), returns a boolean; see L<ExtUtils::MakeMaker/prompt>
 
-=item * C<can_cc()> - can we locate a (the) C compiler
+=item *
 
-=item * C<can_run()> - check if we can run some command
+C<parse_args()> - returns the hashref of options that were passed as arguments to C<perl Makefile.PL>
 
-=item * C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
+=item *
 
-=item * C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.
+C<can_xs()> - Secondary compile testing via ExtUtils::CBuilder
 
-=item * C<is_smoker()> - is the installation on a smoker machine?
+=item *
 
-=item * C<is_interactive()> - is the installation in an interactive terminal?
+C<can_cc()> - can we locate a (the) C compiler
 
-=item * C<is_trial()> - is the release a -TRIAL or _XXX-versioned release?
+=item *
 
-=item * C<is_os($os, ...)> - true if the OS is any of those listed
+C<can_run()> - check if we can run some command
 
-=item * C<isnt_os($os, ...)> - true if the OS is none of those listed
+=item *
 
-=item * C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >> (please keep using the fully-qualified form) to work in Cygwin
+C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
+
+=item *
+
+C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.  When passed a second argument, returns true or false; otherwise, returns undef or the module's C<$VERSION>. (Current API available since version 0.015.)
+
+=item *
+
+C<is_smoker()> - is the installation on a smoker machine?
+
+=item *
+
+C<is_interactive()> - is the installation in an interactive terminal?
+
+=item *
+
+C<is_trial()> - is the release a -TRIAL or _XXX-versioned release?
+
+=item *
+
+C<is_os($os, ...)> - true if the OS is any of those listed
+
+=item *
+
+C<isnt_os($os, ...)> - true if the OS is none of those listed
+
+=item *
+
+C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >> (please keep using the fully-qualified form) to work in Cygwin
 
 =back
 
@@ -253,7 +281,7 @@ L<Module::Install::Can>
 
 Karen Etheridge <ether@cpan.org>
 
-=head1 COPYRIGHT AND LICENSE
+=head1 COPYRIGHT AND LICENCE
 
 This software is copyright (c) 2014 by Karen Etheridge.
 
