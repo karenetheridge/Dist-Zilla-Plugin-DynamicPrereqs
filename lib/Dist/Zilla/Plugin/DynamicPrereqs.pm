@@ -255,8 +255,15 @@ has _all_required_subs => (
                 any { /\b$sub_name\b\(/ } @conditions
             } map { $_->basename } path($self->_include_sub_root)->children;
 
+        my @raw = $self->raw;
+        my @require_subs_in_raw = !@raw ? () :
+            grep {
+                my $sub_name = $_;
+                any { /\b$sub_name\b\(/ } @raw
+            } qw(requires runtime_requires build_requires test_requires);
+
         [ sort($self->_all_required_subs_for(_uniq(
-            $self->include_subs, @subs_in_conditions
+            $self->include_subs, @subs_in_conditions, @require_subs_in_raw,
         ))) ];
     },
 );
@@ -307,7 +314,6 @@ In your F<dist.ini>:
     -condition = has_module('Role::Tiny')
     -condition = !parse_args()->{PUREPERL_ONLY}
     -condition = can_xs()
-    -include_sub = requires
     -raw = requires('Role::Tiny', '1.003000')
 
 or:
@@ -434,6 +440,10 @@ F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
 modules will be added to C<configure requires> metadata.
 This option can be used more than once. See L</AVAILABLE SUBROUTINE
 DEFINITIONS> for the complete list of sub names that can be requested.
+
+You do not need to list subs that are used in C<-condition> clauses, or any of
+C<requires>, C<runtime_requires>, C<build_requires>, C<test_requires> that are
+used in C<-raw> clauses or C<-raw_from_file> files.
 
 =head1 AVAILABLE SUBROUTINE DEFINITIONS
 
