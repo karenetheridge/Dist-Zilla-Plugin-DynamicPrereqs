@@ -251,7 +251,7 @@ has _all_required_subs => (
         my @subs_in_conditions = !@conditions ? () :
             grep {
                 my $sub_name = $_;
-                any { $_ =~ /$sub_name/ } @conditions
+                any { /\b$sub_name\b\(/ } @conditions
             } map { $_->basename } path($self->_include_sub_root)->children;
 
         [ sort($self->_all_required_subs_for(_uniq(
