@@ -13,14 +13,26 @@ use Test::File::ShareDir
     -share => { -module => { 'Dist::Zilla::Plugin::DynamicPrereqs' => 'share/DynamicPrereqs' } };
 
 my $sub_prereqs = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::register_prereqs)->{'%sub_prereqs'};
+my %loaded_subs;
 
 sub load_sub
 {
-    my $sub = shift;
-    my $filename = path(File::ShareDir::module_dir('Dist::Zilla::Plugin::DynamicPrereqs'), 'include_subs')->child($sub);
-    note "loading $filename and " . join(', ', map { "$_ $sub_prereqs->{$sub}{$_}" } keys %{$sub_prereqs->{$sub}});
-    use_module($_, $sub_prereqs->{$sub}{$_}) foreach keys %{$sub_prereqs->{$sub}};
-    do $filename;
+    foreach my $sub (Dist::Zilla::Plugin::DynamicPrereqs->_all_required_subs_for(@_))
+    {
+        next if exists $loaded_subs{$sub};
+
+        foreach my $prereq (keys %{$sub_prereqs->{$sub}})
+        {
+            note "loading $prereq $sub_prereqs->{$sub}{$prereq}";
+            use_module($prereq, $sub_prereqs->{$sub}{$prereq});
+        }
+
+        my $filename = path(File::ShareDir::module_dir('Dist::Zilla::Plugin::DynamicPrereqs'), 'include_subs')->child($sub);
+        note "loading $filename";
+        do $filename;
+        die $@ if $@;
+        ++$loaded_subs{$sub};
+    }
 }
 
 {
