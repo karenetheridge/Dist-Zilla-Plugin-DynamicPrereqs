@@ -19,7 +19,7 @@ foreach my $sub (keys %$sub_prereqs)
     {
         ok(
             Module::CoreList::is_core($module, $sub_prereqs->{$sub}{$module}, $latest_release),
-            "$module $sub_prereqs->{$sub}{$module} is a core module in the latest known release ($latest_release)",
+            "$module $sub_prereqs->{$sub}{$module}, used by $sub, is a core module in the latest known release ($latest_release)",
         );
     }
 }
