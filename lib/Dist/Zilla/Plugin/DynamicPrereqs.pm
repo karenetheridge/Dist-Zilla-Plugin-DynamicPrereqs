@@ -238,6 +238,7 @@ my %sub_dependencies = (
     can_xs => [ qw(can_cc) ],
     can_cc => [ qw(can_run) ],
     can_run => [ qw(maybe_command) ],
+    requires => [ qw(runtime_requires) ],
 );
 
 has _all_required_subs => (
@@ -306,13 +307,14 @@ In your F<dist.ini>:
     -condition = has_module('Role::Tiny')
     -condition = !parse_args()->{PUREPERL_ONLY}
     -condition = can_xs()
-    -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+    -include_sub = requires
+    -raw = requires('Role::Tiny', '1.003000')
 
 or:
 
     [DynamicPrereqs]
     -delimiter = |
-    -raw = |$WriteMakefileArgs{TEST_REQUIRES}{'Devel::Cover'} = $FallbackPrereqs{'Devel::Cover'} = '0'
+    -raw = |test_requires('Devel::Cover')
     -raw = |    if $ENV{EXTENDED_TESTING} or is_smoker();
     -include_sub = is_smoker
 
@@ -414,12 +416,12 @@ statement, and the C<-raw> lines are contained as the body of the block. For exa
 
     [DynamicPrereqs]
     -condition = $] > '5.020'
-    -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+    -raw = requires('1.003000')
 
 results in the F<Makefile.PL> snippet:
 
     if ($] > '5.020') {
-    $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+    requires('Role::Tiny', '1.003000')
     }
 
 =head2 C<-include_sub>
@@ -478,6 +480,21 @@ Available subs are:
 
 * C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >>
   (please keep using the fully-qualified form) to work in Cygwin
+
+* C<runtime_requires($module, $version (optional))> - adds the module to runtime
+  prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
+  Added in 0.016.
+
+* C<requires($module, $version (optional))> - alias for C<runtime_requires>.
+  Added in 0.016.
+
+* C<build_requires($module, $version (optional))> - adds the module to runtime
+  prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
+  Added in 0.016.
+
+* C<test_requires($module, $version (optional))> - adds the module to runtime
+  prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
+  Added in 0.016.
 
 =end :list
 

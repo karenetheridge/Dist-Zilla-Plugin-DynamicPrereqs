@@ -7,6 +7,7 @@ use Path::Tiny;
 use PadWalker 'closed_over';
 use Module::Runtime qw(use_module module_notional_filename);
 use ExtUtils::MakeMaker;
+use Test::Deep;
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
 use Test::File::ShareDir
@@ -66,6 +67,57 @@ sub load_sub
         is(has_module($module, '0'), 1, "$module is installed at least version 0");
         is(has_module($module, $module->VERSION), 1, "$module is installed at least version " . $module->VERSION);
     }
+}
+
+{
+    load_sub('requires', 'build_requires', 'test_requires');
+
+    our (%WriteMakefileArgs, %FallbackPrereqs);
+
+    requires('Alpha', '1.0');
+    runtime_requires('Beta', '2.0');
+    build_requires('Gamma', '3.0');
+    test_requires('Delta', '4.0');
+
+    requires('Foo');
+    runtime_requires('Bar');
+    build_requires('Baz');
+    test_requires('Qux');
+
+    cmp_deeply(
+        \%WriteMakefileArgs,
+        {
+            PREREQ_PM => {
+                'Alpha' => '1.0',
+                'Beta'  => '2.0',
+                'Foo'   => '0',
+                'Bar'   => '0',
+            },
+            BUILD_REQUIRES => {
+                'Gamma' => '3.0',
+                'Baz'   => '0',
+            },
+            TEST_REQUIRES => {
+                'Delta' => '4.0',
+                'Qux'   => '0',
+            },
+        },
+        '%WriteMakefileArgs is correctly updated',
+    );
+    cmp_deeply(
+        \%FallbackPrereqs,
+        {
+            'Alpha' => '1.0',
+            'Beta'  => '2.0',
+            'Gamma' => '3.0',
+            'Delta' => '4.0',
+            'Foo'   => '0',
+            'Bar'   => '0',
+            'Baz'   => '0',
+            'Qux'   => '0',
+        },
+        '%FallbackPrereqs is correctly updated',
+    );
 }
 
 done_testing;

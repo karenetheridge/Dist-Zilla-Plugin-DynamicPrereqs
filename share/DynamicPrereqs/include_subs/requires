@@ -1,0 +1,3 @@
+sub requires {
+  goto &runtime_requires;
+}
