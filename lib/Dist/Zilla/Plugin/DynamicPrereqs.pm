@@ -248,22 +248,15 @@ has _all_required_subs => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        my @conditions = $self->conditions;
-        my @subs_in_conditions = !@conditions ? () :
+        my @code = ($self->conditions, $self->raw);
+        my @subs_in_code = !@code ? () :
             grep {
                 my $sub_name = $_;
-                any { /\b$sub_name\b\(/ } @conditions
+                any { /\b$sub_name\b\(/ } @code
             } map { $_->basename } path($self->_include_sub_root)->children;
 
-        my @raw = $self->raw;
-        my @require_subs_in_raw = !@raw ? () :
-            grep {
-                my $sub_name = $_;
-                any { /\b$sub_name\b\(/ } @raw
-            } qw(requires runtime_requires build_requires test_requires);
-
         [ sort($self->_all_required_subs_for(_uniq(
-            $self->include_subs, @subs_in_conditions, @require_subs_in_raw,
+            $self->include_subs, @subs_in_code,
         ))) ];
     },
 );
@@ -432,21 +425,17 @@ results in the F<Makefile.PL> snippet:
 
 =head2 C<-include_sub>
 
-(Available since version 0.010; some subs have been added later, as noted)
-
-The name of a subroutine that you intend to call from the code inserted via
-C<-raw> or C<-raw_from_file>. Its definition will be included in
-F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
-modules will be added to C<configure requires> metadata.
-This option can be used more than once. See L</AVAILABLE SUBROUTINE
-DEFINITIONS> for the complete list of sub names that can be requested.
-
-You do not need to list subs that are used in C<-condition> clauses, or any of
-C<requires>, C<runtime_requires>, C<build_requires>, C<test_requires> that are
-used in C<-raw> clauses or C<-raw_from_file> files.
+(Available since version 0.010; rendered unnecessary in 0.016 (all definitions
+are now included automatically, when used).
 
 =head1 AVAILABLE SUBROUTINE DEFINITIONS
 
+A number of helper subroutines are available for use within your code inserted
+via C<-raw>, C<-raw_from_file>, or C<-condition> clauses. When used, their
+definition(s) will be included automatically in F<Makefile.PL> (as well as
+those of any other subroutines I<they> call).
+
+Unless otherwise noted, these all became available in version 0.010.
 Available subs are:
 
 =begin :list

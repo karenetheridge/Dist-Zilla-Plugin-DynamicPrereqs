@@ -4,6 +4,8 @@ Revision history for Dist-Zilla-Plugin-DynamicPrereqs
           - added new helper subs: requires, runtime_requires,
             build_requires, and test_requires, as sugar for updating prereqs
             in Makefile.PL
+          - the -include_sub option is no longer needed: -raw clauses are also
+            now searched for sub names.
 
 0.015     2015-08-21 23:49:23Z
           - has_module($module) now returns the $VERSION of the installed
