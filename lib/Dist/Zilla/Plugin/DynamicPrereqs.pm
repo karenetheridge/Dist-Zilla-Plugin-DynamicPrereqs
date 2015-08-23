@@ -346,6 +346,15 @@ Only F<Makefile.PL> modification is supported at this time. This author
 considers the use of L<Module::Build> to be questionable in all circumstances,
 and L<Module::Build::Tiny> does not (yet?) support dynamic configuration.
 
+=head1 BE VIGILANT!
+
+You are urged to check the generated F<Makefile.PL> for sanity, and to run it
+at least once to validate its syntax. Although every effort is made to
+generate valid and correct code, mistakes can happen, so verification is
+needed before shipping.
+
+Please also see the other warnings later in this document.
+
 =head1 CONFIGURATION OPTIONS
 
 =head2 C<-raw>
