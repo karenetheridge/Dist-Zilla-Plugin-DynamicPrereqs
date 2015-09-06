@@ -6,6 +6,11 @@ branches:
   topic/requires_options
 
 
+more user code that we can convert:
+OnlyCorePrereqs - using MCL
+Cond-Expr
+List-Gather
+
 -----------------
 
 
