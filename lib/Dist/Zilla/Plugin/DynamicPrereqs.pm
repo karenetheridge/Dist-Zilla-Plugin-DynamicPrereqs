@@ -368,11 +368,6 @@ L<Dist::Zilla::Plugin::MakeMaker::Awesome> since L<Dist::Zilla> C<5.001>.
 
 This option can be used more than once; lines are added in the order in which they are provided.
 
-This option is pretty low-level; I anticipate its use to be deprecated when
-better options are added (see below). In particular, the user should not have
-to be aware of existing code in F<Makefile.PL> nor the exact code required to
-add prerequisites of various types.
-
 If you use external libraries in the code you are inserting, you B<must> add
 these modules to C<configure_requires> prereqs in metadata (e.g. via
 C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
