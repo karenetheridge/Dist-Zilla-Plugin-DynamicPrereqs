@@ -1,5 +1,4 @@
 sub test_requires {
   my ($module, $version_or_range) = @_;
-  $WriteMakefileArgs{TEST_REQUIRES}{$module} = $FallbackPrereqs{$module} = $version_or_range || 0;
-  return;
+  _add_prereq(TEST_REQUIRES => $module, $version_or_range);
 }

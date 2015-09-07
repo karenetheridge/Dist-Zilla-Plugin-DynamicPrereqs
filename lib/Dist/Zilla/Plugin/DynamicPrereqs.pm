@@ -242,6 +242,9 @@ my %sub_dependencies = (
     can_cc => [ qw(can_run) ],
     can_run => [ qw(maybe_command) ],
     requires => [ qw(runtime_requires) ],
+    runtime_requires => [ qw(_add_prereq) ],
+    build_requires => [ qw(_add_prereq) ],
+    test_requires => [ qw(_add_prereq) ],
 );
 
 has _all_required_subs => (

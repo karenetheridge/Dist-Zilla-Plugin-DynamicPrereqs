@@ -3,6 +3,8 @@ Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 {{$NEXT}}
           - added options '-body', '-body_from_file' as aliases for '-raw',
             '-raw_from_file'
+          - *_requires subs now warn if adding a prereq that might conflict
+            with one that already exists (prereq merging not yet supported)
 
 0.017     2015-09-27 07:13:45Z
           - fix new test failure on MSWin32
