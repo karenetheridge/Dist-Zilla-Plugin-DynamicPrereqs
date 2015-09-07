@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.015
+version 0.016
 
 =head1 SYNOPSIS
 
@@ -18,13 +18,13 @@ In your F<dist.ini>:
     -condition = has_module('Role::Tiny')
     -condition = !parse_args()->{PUREPERL_ONLY}
     -condition = can_xs()
-    -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+    -raw = requires('Role::Tiny', '1.003000')
 
 or:
 
     [DynamicPrereqs]
     -delimiter = |
-    -raw = |$WriteMakefileArgs{TEST_REQUIRES}{'Devel::Cover'} = $FallbackPrereqs{'Devel::Cover'} = '0'
+    -raw = |test_requires('Devel::Cover')
     -raw = |    if $ENV{EXTENDED_TESTING} or is_smoker();
     -include_sub = is_smoker
 
@@ -58,6 +58,15 @@ Only F<Makefile.PL> modification is supported at this time. This author
 considers the use of L<Module::Build> to be questionable in all circumstances,
 and L<Module::Build::Tiny> does not (yet?) support dynamic configuration.
 
+=head1 BE VIGILANT!
+
+You are urged to check the generated F<Makefile.PL> for sanity, and to run it
+at least once to validate its syntax. Although every effort is made to
+generate valid and correct code, mistakes can happen, so verification is
+needed before shipping.
+
+Please also see the other warnings later in this document.
+
 =head1 CONFIGURATION OPTIONS
 
 =head2 C<-raw>
@@ -69,11 +78,6 @@ L<Dist::Zilla::Plugin::MakeMaker> and subclasses (e.g.
 L<Dist::Zilla::Plugin::MakeMaker::Awesome> since L<Dist::Zilla> C<5.001>.
 
 This option can be used more than once; lines are added in the order in which they are provided.
-
-This option is pretty low-level; I anticipate its use to be deprecated when
-better options are added (see below). In particular, the user should not have
-to be aware of existing code in F<Makefile.PL> nor the exact code required to
-add prerequisites of various types.
 
 If you use external libraries in the code you are inserting, you B<must> add
 these modules to C<configure_requires> prereqs in metadata (e.g. via
@@ -117,27 +121,27 @@ statement, and the C<-raw> lines are contained as the body of the block. For exa
 
     [DynamicPrereqs]
     -condition = $] > '5.020'
-    -raw = $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+    -raw = requires('1.003000')
 
 results in the F<Makefile.PL> snippet:
 
     if ($] > '5.020') {
-    $WriteMakefileArgs{PREREQ_PM}{'Role::Tiny'} = $FallbackPrereqs{'Role::Tiny'} = '1.003000'
+    requires('Role::Tiny', '1.003000')
     }
 
 =head2 C<-include_sub>
 
-(Available since version 0.010; some subs have been added later, as noted)
-
-The name of a subroutine that you intend to call from the code inserted via
-C<-raw> or C<-raw_from_file>. Its definition will be included in
-F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
-modules will be added to C<configure requires> metadata.
-This option can be used more than once. See L</AVAILABLE SUBROUTINE
-DEFINITIONS> for the complete list of sub names that can be requested.
+(Available since version 0.010; rendered unnecessary in 0.016 (all definitions
+are now included automatically, when used).
 
 =head1 AVAILABLE SUBROUTINE DEFINITIONS
 
+A number of helper subroutines are available for use within your code inserted
+via C<-raw>, C<-raw_from_file>, or C<-condition> clauses. When used, their
+definition(s) will be included automatically in F<Makefile.PL> (as well as
+those of any other subroutines I<they> call).
+
+Unless otherwise noted, these all became available in version 0.010.
 Available subs are:
 
 =over 4
@@ -198,6 +202,22 @@ C<isnt_os($os, ...)> - true if the OS is none of those listed
 
 C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >> (please keep using the fully-qualified form) to work in Cygwin
 
+=item *
+
+C<runtime_requires($module, $version (optional))> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
+
+=item *
+
+C<requires($module, $version (optional))> - alias for C<runtime_requires>. Added in 0.016.
+
+=item *
+
+C<build_requires($module, $version (optional))> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
+
+=item *
+
+C<test_requires($module, $version (optional))> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
+
 =back
 
 =head1 WARNING: INCOMPLETE SUBROUTINE IMPLEMENTATIONS!
@@ -243,14 +263,6 @@ C<-build> a module and version that is added to build prereqs should the C<-cond
 
 =back
 
-=head1 SUPPORT
-
-=for stopwords irc
-
-Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Plugin-DynamicPrereqs>
-(or L<bug-Dist-Zilla-Plugin-DynamicPrereqs@rt.cpan.org|mailto:bug-Dist-Zilla-Plugin-DynamicPrereqs@rt.cpan.org>).
-I am also usually active on irc, as 'ether' at C<irc.perl.org>.
-
 =head1 SEE ALSO
 
 =over 4
@@ -276,6 +288,19 @@ L<Dist::Zilla::Plugin::PerlVersionPrereqs>
 L<Module::Install::Can>
 
 =back
+
+=head1 SUPPORT
+
+Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Dist-Zilla-Plugin-DynamicPrereqs>
+(or L<bug-Dist-Zilla-Plugin-DynamicPrereqs@rt.cpan.org|mailto:bug-Dist-Zilla-Plugin-DynamicPrereqs@rt.cpan.org>).
+
+There is also a mailing list available for users of this distribution, at
+http://dzil.org/#mailing-list.
+
+There is also an irc channel available for users of this distribution, at
+irc://irc.perl.org/#distzilla.
+
+I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 
 =head1 AUTHOR
 
