@@ -428,7 +428,8 @@ are now included automatically, when used).
 A number of helper subroutines are available for use within your code inserted
 via C<-raw>, C<-raw_from_file>, or C<-condition> clauses. When used, their
 definition(s) will be included automatically in F<Makefile.PL> (as well as
-those of any other subroutines I<they> call).
+those of any other subroutines I<they> call); necessary prerequisite modules
+will be added to C<configure requires> metadata.
 
 Unless otherwise noted, these all became available in version 0.010.
 Available subs are:
