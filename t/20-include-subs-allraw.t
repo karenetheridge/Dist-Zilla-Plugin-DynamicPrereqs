@@ -27,8 +27,8 @@ my $tzil = Builder->from_config(
                 [ MakeMaker => ],
                 [ DynamicPrereqs => {
                         -raw => [
-                            q|if (is_os('MSWin32')) {|,
-                            q|$WriteMakefileArgs{PREREQ_PM}{Foo} = substr('blah', 0, 1);|,
+                            q|if (isnt_os('bunk')) {|,
+                            q|$WriteMakefileArgs{PREREQ_PM}{strict} = substr('123', 0, 1);|,
                             '}',
                         ],
                     } ],
@@ -72,7 +72,7 @@ unlike($makefile, qr/\t/m, 'no tabs in modified file');
 isnt(
     index(
         $makefile,
-        "if (is_os('MSWin32')) {\n\$WriteMakefileArgs{PREREQ_PM}{Foo} = substr('blah', 0, 1);\n}\n",
+        "if (isnt_os('bunk')) {\n\$WriteMakefileArgs{PREREQ_PM}{strict} = substr('123', 0, 1);\n}\n",
     ),
     -1,
     'code inserted into Makefile.PL is correct',
@@ -84,9 +84,9 @@ like(
     $makefile,
     qr/
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $Dist::Zilla::Plugin::DynamicPrereqs::VERSION
-sub is_os \{
+sub isnt_os \{
 (^  [^\n]+\n)+\}\n\z/sm,
-    "Makefile.PL contains definition for is_os(), and no other subs",
+    "Makefile.PL contains definition for isnt_os(), and no other subs",
 );
 
 run_makemaker($tzil);
@@ -96,7 +96,7 @@ run_makemaker($tzil);
     cmp_deeply(
         \%{'main::MyTestMakeMaker::'},
         superhashof({
-            map {; $_ => *{"MyTestMakeMaker::$_"} } 'is_os',
+            map {; $_ => *{"MyTestMakeMaker::$_"} } 'isnt_os',
         }),
         'Makefile.PL defined all required subroutines',
     ) or diag 'Makefile.PL defined symbols: ', explain \%{'main::MyTestMakeMaker::'};

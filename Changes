@@ -1,6 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - fix new test failure on MSWin32
 
 0.016     2015-09-07 00:12:19Z
           - added new helper subs: requires, runtime_requires,
