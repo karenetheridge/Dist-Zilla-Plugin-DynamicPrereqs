@@ -14,8 +14,7 @@ List-Gather
 -----------------
 
 
-- -conditional option
-- -runtime, -test, -build options
+-----------------
 
 
 ; patch MI::Can, Devel::CheckBin with updates that I develop here.
