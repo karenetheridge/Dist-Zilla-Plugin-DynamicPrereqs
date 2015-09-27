@@ -1,6 +1,5 @@
 sub test_requires {
   my ($module, $version_or_range) = @_;
-  $version_or_range = '0' if not $version_or_range;
-  $WriteMakefileArgs{TEST_REQUIRES}{$module} = $FallbackPrereqs{$module} = $version_or_range;
+  $WriteMakefileArgs{TEST_REQUIRES}{$module} = $FallbackPrereqs{$module} = $version_or_range || 0;
   return;
 }
