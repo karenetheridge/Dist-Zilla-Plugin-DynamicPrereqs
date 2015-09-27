@@ -11,6 +11,9 @@ OnlyCorePrereqs - using MCL
 Cond-Expr
 List-Gather
 
+https://metacpan.org/source/KENTNL/Dist-Zilla-Util-ExpandINI-0.003001/dist.ini#L1
+https://metacpan.org/source/KENTNL/Dist-Zilla-Util-Test-KENTNL-1.005012/dist.ini#L1
+
 -----------------
 
 The name of a subroutine that you intend to call from the code inserted via
