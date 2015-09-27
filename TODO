@@ -13,6 +13,12 @@ List-Gather
 
 -----------------
 
+The name of a subroutine that you intend to call from the code inserted via
+C<-raw>/C<-body> or C<-raw_from_file>/C<-body_from_file>. Its definition will be included in
+F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
+modules will be added to C<configure requires> metadata.
+This option can be used more than once. See L</AVAILABLE SUBROUTINE
+DEFINITIONS> for the complete list of sub names that can be requested.
 
 -----------------
 
