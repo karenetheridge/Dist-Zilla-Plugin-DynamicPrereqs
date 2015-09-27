@@ -55,7 +55,7 @@ Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 0.005     2014-06-16 00:18:15Z
           - fix case where Makefile.PL content was not recognized when there
-            were no (static) prequisites declared for the distribution
+            were no (static) prerequisites declared for the distribution
 
 0.004     2014-05-19 05:15:36Z
           - fix tests that fail with older ExtUtils::MakeMaker due two stupid
