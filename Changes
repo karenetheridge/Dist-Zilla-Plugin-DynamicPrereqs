@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.017     2015-09-27 07:13:45Z
           - fix new test failure on MSWin32
 
 0.016     2015-09-07 00:12:19Z
