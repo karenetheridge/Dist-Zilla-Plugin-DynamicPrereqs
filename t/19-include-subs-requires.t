@@ -84,7 +84,7 @@ foreach my $subs (
     );
 
     isnt(
-        index($makefile, "sub $_ {\n"),
+        index($makefile, "\nsub $_ {"),
         -1,
         "Makefile.PL contains definition for $_()",
     ) foreach @$subs;

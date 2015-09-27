@@ -84,7 +84,7 @@ unlike($makefile, qr/[^\S\n]\n/m, 'no trailing whitespace in modified file');
 unlike($makefile, qr/\t/m, 'no tabs in modified file');
 
 isnt(
-    index($makefile, "sub $_ {\n"),
+    index($makefile, "sub $_ {"),
     -1,
     "Makefile.PL contains definition for $_()",
 ) foreach @subs;
