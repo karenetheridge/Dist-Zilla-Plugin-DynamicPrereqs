@@ -73,7 +73,7 @@ my $file = $build_dir->child('Makefile.PL');
 ok(-e $file, 'Makefile.PL created');
 
 my $makefile = $file->slurp_utf8;
-unlike($makefile, qr/[^\S\n]\n/m, 'no trailing whitespace in modified file');
+unlike($makefile, qr/[^\S\n]\n/, 'no trailing whitespace in modified file');
 
 my $version = Dist::Zilla::Plugin::DynamicPrereqs->VERSION;
 isnt(
