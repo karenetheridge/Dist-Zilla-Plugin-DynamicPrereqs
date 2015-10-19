@@ -7,12 +7,11 @@ branches:
 
 
 more user code that we can convert:
-OnlyCorePrereqs - using MCL
-Cond-Expr
-List-Gather
 
 https://metacpan.org/source/KENTNL/Dist-Zilla-Util-ExpandINI-0.003001/dist.ini#L1
+    https://github.com/kentnl/Dist-Zilla-Util-ExpandINI/pull/2
 https://metacpan.org/source/KENTNL/Dist-Zilla-Util-Test-KENTNL-1.005012/dist.ini#L1
+    https://github.com/kentnl/Dist-Zilla-Util-Test-KENTNL/pull/1
 
 -----------------
 
