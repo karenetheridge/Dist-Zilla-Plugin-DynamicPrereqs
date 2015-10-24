@@ -1,26 +1,4 @@
 
-lots of stuff in stashes...
-
-branches:
-  topic/conditional
-  topic/requires_options
-
-
-more user code that we can convert:
-
-https://metacpan.org/source/KENTNL/Dist-Zilla-Util-ExpandINI-0.003001/dist.ini#L1
-    https://github.com/kentnl/Dist-Zilla-Util-ExpandINI/pull/2
-https://metacpan.org/source/KENTNL/Dist-Zilla-Util-Test-KENTNL-1.005012/dist.ini#L1
-    https://github.com/kentnl/Dist-Zilla-Util-Test-KENTNL/pull/1
-
------------------
-
-The name of a subroutine that you intend to call from the code inserted via
-C<-raw>/C<-body> or C<-raw_from_file>/C<-body_from_file>. Its definition will be included in
-F<Makefile.PL>, as well as any helper subs it calls; necessary prerequisite
-modules will be added to C<configure requires> metadata.
-This option can be used more than once. See L</AVAILABLE SUBROUTINE
-DEFINITIONS> for the complete list of sub names that can be requested.
 
 -----------------
 
@@ -99,25 +77,9 @@ so we don't always force a configure-requires on CMR.
 
 ----------------
 
- * then can implement -conditional and -runtime_requires syntax later.
-
-
- -runtime_requires = ...
- Module::Name = 1.0   (equivalent to -runtime_requires)
- -test_requires = ...
- -build_requires = ...
- -configure_requires = ... *ERROR*
- explicitly document that recommends, suggests are not supported and not a
- good idea to insert dynamically anyway (although we could, with lots of
- META_MERGE/META_ADD black magic -- so not recommended)
-
 
  methods not yet defined:
  has_compiler()
-
-
-can combine -conditions, -raw and *requires.  requires just adds more raw content,
-that gets wrapped with the conditional.
 
 
 ---------------
