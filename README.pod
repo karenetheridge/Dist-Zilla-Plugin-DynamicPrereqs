@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.017
+version 0.018
 
 =head1 SYNOPSIS
 
@@ -18,7 +18,7 @@ In your F<dist.ini>:
     -condition = has_module('Role::Tiny')
     -condition = !parse_args()->{PUREPERL_ONLY}
     -condition = can_xs()
-    -raw = requires('Role::Tiny', '1.003000')
+    -body = requires('Role::Tiny', '1.003000')
 
 or:
 
@@ -71,6 +71,8 @@ Please also see the other warnings later in this document.
 
 =head2 C<-raw>
 
+=head2 C<-body>
+
 The code to be inserted; must be valid and complete perl statements. You can
 reference and modify the already-declared C<%WriteMakefileArgs> and
 C<%FallbackPrereqs> variables, as inserted into F<Makefile.PL> by
@@ -83,6 +85,8 @@ If you use external libraries in the code you are inserting, you B<must> add
 these modules to C<configure_requires> prereqs in metadata (e.g. via
 C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
+C<-body> first became available in version 0.018.
+
 =for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build setup_installer register_prereqs
 
 =head2 C<-delimiter>
@@ -90,7 +94,7 @@ C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 (Available since version 0.007)
 
 A string, usually a single character, which is stripped from the beginning of
-all C<-raw> lines. This is because the INI file format strips all leading
+all C<-raw>/C<-body> lines. This is because the INI file format strips all leading
 whitespace from option values, so including this character at the front allows
 you to use leading whitespace in an option string, so you can indent blocks of
 code properly.
@@ -99,8 +103,12 @@ code properly.
 
 (Available since version 0.010)
 
+=head2 C<-body_from_file>
+
+(Available since version 0.018)
+
 A filename that contains the code to be inserted; must be valid and complete
-perl statements, as with C<-raw> above.  This file must be part of the build,
+perl statements, as with C<-raw>/C<-body> above.  This file must be part of the build,
 but it is pruned from the built distribution.
 
 =head2 C<-condition>
@@ -116,12 +124,12 @@ appropriately parenthesize each of your conditions to ensure correct order of
 operations.)  Any use of recognized subroutines will cause their definitions
 to be included automatically (see L<AVAILABLE SUBROUTINE DEFINITIONS>, below).
 
-When combined with C<-raw> lines, the condition is placed first in a C<if>
-statement, and the C<-raw> lines are contained as the body of the block. For example:
+When combined with C<-raw>/C<-body> lines, the condition is placed first in a C<if>
+statement, and the C<-raw>/C<-body> lines are contained as the body of the block. For example:
 
     [DynamicPrereqs]
     -condition = $] > '5.020'
-    -raw = requires('1.003000')
+    -body = requires('1.003000')
 
 results in the F<Makefile.PL> snippet:
 
@@ -137,7 +145,7 @@ are now included automatically, when used).
 =head1 AVAILABLE SUBROUTINE DEFINITIONS
 
 A number of helper subroutines are available for use within your code inserted
-via C<-raw>, C<-raw_from_file>, or C<-condition> clauses. When used, their
+via C<-body>, C<-body_from_file>, C<-raw>, C<-raw_from_file>, or C<-condition> clauses. When used, their
 definition(s) will be included automatically in F<Makefile.PL> (as well as
 those of any other subroutines I<they> call); necessary prerequisite modules
 will be added to C<configure requires> metadata.
@@ -299,7 +307,7 @@ There is also a mailing list available for users of this distribution, at
 L<http://dzil.org/#mailing-list>.
 
 There is also an irc channel available for users of this distribution, at
-irc://irc.perl.org/#distzilla.
+L<irc://irc.perl.org/#distzilla>.
 
 I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 

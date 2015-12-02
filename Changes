@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.018     2015-12-02 03:40:03Z
           - added options '-body', '-body_from_file' as aliases for '-raw',
             '-raw_from_file'
           - *_requires subs now warn if adding a prereq that might conflict
