@@ -34,7 +34,7 @@ foreach my $subs (
                     [ DynamicPrereqs => {
                             '-condition' => '1 == 1',
                             -raw => [
-                                map { $_ . q|('Role::Tiny', '1.003000');| } @$subs
+                                map { $_ . q|('strict', '0.23');| } @$subs
                             ],
                         } ],
                 ),
@@ -77,7 +77,7 @@ foreach my $subs (
     isnt(
         index(
             $makefile,
-            "if (1 == 1) {\n" . join("\n", map { $_ . q|('Role::Tiny', '1.003000');| } @$subs) . "\n" . "}\n",
+            "if (1 == 1) {\n" . join("\n", map { $_ . q|('strict', '0.23');| } @$subs) . "\n" . "}\n",
         ),
         -1,
         'Makefile.PL condition and raw clauses are correct',
