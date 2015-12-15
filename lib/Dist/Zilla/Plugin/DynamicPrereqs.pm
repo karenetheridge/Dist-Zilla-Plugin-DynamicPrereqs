@@ -149,7 +149,7 @@ sub setup_installer
 
     $content = substr($content, 0, $pos)
         . "\n\n"
-        . "# inserted by " . blessed($self) . ' ' . $self->VERSION . "\n"
+        . $self->_header . "\n"
         . $code
         . substr($content, $pos);
 
@@ -157,8 +157,7 @@ sub setup_installer
 
     if (my @include_subs = grep { not exists $included_subs{$_} } $self->_all_required_subs)
     {
-        $content .= "\n# inserted by " . blessed($self) . ' ' . $self->VERSION
-            if not keys %included_subs;
+        $content .= "\n" . $self->_header if not keys %included_subs;
 
         if (my @missing_subs = grep { !-f path($self->_include_sub_root, $_) } @include_subs)
         {
@@ -188,6 +187,15 @@ sub setup_installer
     $file->content($content);
     return;
 }
+
+has _header => (
+    is => 'ro', isa => 'Str',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        "# inserted by " . blessed($self) . ' ' . $self->VERSION;
+    },
+);
 
 my %sub_prereqs = (
     can_xs => {
