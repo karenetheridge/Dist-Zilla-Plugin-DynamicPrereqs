@@ -7,7 +7,6 @@ use Test::DZil;
 use Test::Fatal;
 use Path::Tiny;
 use Test::Deep;
-use PadWalker 'closed_over';
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
 use Test::File::ShareDir
@@ -15,8 +14,6 @@ use Test::File::ShareDir
 
 use lib 't/lib';
 use Helper;
-
-my $included_subs = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::setup_installer)->{'%included_subs'};
 
 my $tzil = Builder->from_config(
     { dist_root => 'does-not-exist' },
