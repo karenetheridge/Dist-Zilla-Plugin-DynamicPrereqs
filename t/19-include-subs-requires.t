@@ -16,7 +16,7 @@ use Test::File::ShareDir
 use lib 't/lib';
 use Helper;
 
-my $included_subs = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::setup_installer)->{'%included_subs'};
+my $included_subs = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::_build__sub_definitions)->{'%included_subs'};
 
 foreach my $subs (
     [ 'requires' ],

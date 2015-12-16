@@ -155,34 +155,7 @@ sub setup_installer
 
     $content =~ s/\n+\z/\n/;
 
-    if (my @include_subs = grep { not exists $included_subs{$_} } $self->_all_required_subs)
-    {
-        $content .= "\n" . $self->_header if not keys %included_subs;
-
-        if (my @missing_subs = grep { !-f path($self->_include_sub_root, $_) } @include_subs)
-        {
-            $self->log_fatal(
-                @missing_subs > 1
-                    ? [ 'no definitions available for subs %s!', join(', ', map { "'" . $_  ."'" } @missing_subs) ]
-                    : [ 'no definition available for sub \'%s\'!', $missing_subs[0] ]
-            );
-        }
-
-        # On consultation with ribasushi I agree that we cannot let authors
-        # use some sub definitions without copious danger tape.
-        $self->_warn_include_subs(@include_subs);
-
-        my @sub_definitions = map { path($self->_include_sub_root, $_)->slurp_utf8 } @include_subs;
-        $content .= "\n"
-            . $self->fill_in_string(
-                join("\n", @sub_definitions),
-                {
-                    dist => \($self->zilla),
-                    plugin => \$self,
-                },
-            );
-        @included_subs{@include_subs} = (() x @include_subs);
-    }
+    $content .= $self->_sub_definitions;
 
     $file->content($content);
     return;
@@ -196,6 +169,48 @@ has _header => (
         "# inserted by " . blessed($self) . ' ' . $self->VERSION;
     },
 );
+
+has _sub_definitions => (
+    is => 'ro', isa => 'Str',
+    lazy => 1, builder => '_build__sub_definitions',
+);
+
+sub _build__sub_definitions
+{
+    my $self = shift;
+
+    my @include_subs = grep { not exists $included_subs{$_} } $self->_all_required_subs;
+    return '' if not @include_subs;
+
+    my $content;
+    $content .= "\n" . $self->_header if not keys %included_subs;
+
+    if (my @missing_subs = grep { !-f path($self->_include_sub_root, $_) } @include_subs)
+    {
+        $self->log_fatal(
+            @missing_subs > 1
+                ? [ 'no definitions available for subs %s!', join(', ', map { "'" . $_  ."'" } @missing_subs) ]
+                : [ 'no definition available for sub \'%s\'!', $missing_subs[0] ]
+        );
+    }
+
+    # On consultation with ribasushi I agree that we cannot let authors
+    # use some sub definitions without copious danger tape.
+    $self->_warn_include_subs(@include_subs);
+
+    my @sub_definitions = map { path($self->_include_sub_root, $_)->slurp_utf8 } @include_subs;
+    $content .= "\n"
+        . $self->fill_in_string(
+            join("\n", @sub_definitions),
+            {
+                dist => \($self->zilla),
+                plugin => \$self,
+            },
+        );
+    @included_subs{@include_subs} = (() x @include_subs);
+
+    return $content;
+}
 
 my %sub_prereqs = (
     can_xs => {
