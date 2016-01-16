@@ -21,7 +21,6 @@ use Try::Tiny;
 use Path::Tiny;
 use File::ShareDir;
 use namespace::autoclean;
-use feature 'state';
 use Term::ANSIColor 3.00 'colored';
 
 has raw => (
@@ -114,6 +113,9 @@ sub after_build
         if first { $_->name eq 'Build.PL' } @{ $self->zilla->files };
 }
 
+# track which subs have already been included by some other instance
+my %included_subs;
+
 sub setup_installer
 {
     my $self = shift;
@@ -152,9 +154,6 @@ sub setup_installer
         . substr($content, $pos);
 
     $content =~ s/\n+\z/\n/;
-
-    # track which subs have already been included by some other instance
-    state %included_subs;
 
     if (my @include_subs = grep { not exists $included_subs{$_} } $self->_all_required_subs)
     {
