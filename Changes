@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
+{{$NEXT}}
+
 0.019     2016-01-20 04:43:24Z
           - perl prerequisite lowered to 5.8 (Graham Ollis)
 
