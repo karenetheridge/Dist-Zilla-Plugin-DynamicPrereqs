@@ -7,7 +7,7 @@ use Test::DZil;
 use Test::Fatal;
 use Path::Tiny;
 use Test::Deep;
-use PadWalker 'peek_sub';
+use PadWalker 'closed_over';
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
 use Test::File::ShareDir
@@ -16,7 +16,7 @@ use Test::File::ShareDir
 use lib 't/lib';
 use Helper;
 
-my $included_subs = peek_sub(\&Dist::Zilla::Plugin::DynamicPrereqs::setup_installer)->{'%included_subs'};
+my $included_subs = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::setup_installer)->{'%included_subs'};
 
 foreach my $subs (
     [ 'requires' ],
