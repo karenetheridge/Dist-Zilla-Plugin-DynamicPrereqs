@@ -1,6 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - perl prerequisite lowered to 5.8 (Graham Ollis)
 
 0.018     2015-12-02 03:40:03Z
           - added options '-body', '-body_from_file' as aliases for '-raw',
