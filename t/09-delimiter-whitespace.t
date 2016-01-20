@@ -10,6 +10,9 @@ use Path::Tiny;
 use lib 't/lib';
 use Helper;
 
+use Test::File::ShareDir
+    -share => { -module => { 'Dist::Zilla::Plugin::DynamicPrereqs' => 'share/DynamicPrereqs' } };
+
 my $tzil = Builder->from_config(
     { dist_root => 'does-not-exist' },
     {
