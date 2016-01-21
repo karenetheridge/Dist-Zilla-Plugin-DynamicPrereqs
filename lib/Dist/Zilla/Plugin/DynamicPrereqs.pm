@@ -343,7 +343,6 @@ or:
     -delimiter = |
     -raw = |test_requires('Devel::Cover')
     -raw = |    if $ENV{EXTENDED_TESTING} or is_smoker();
-    -include_sub = is_smoker
 
 or:
 
