@@ -480,7 +480,7 @@ Available subs are:
 * C<parse_args()> - returns the hashref of options that were passed as
   arguments to C<perl Makefile.PL>
 
-* C<can_xs()> - Secondary compile testing via ExtUtils::CBuilder
+* C<can_xs()> - Secondary compile testing via L<ExtUtils::CBuilder>
 
 * C<can_cc()> - can we locate a (the) C compiler
 
