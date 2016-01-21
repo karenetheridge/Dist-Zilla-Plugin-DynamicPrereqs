@@ -78,8 +78,8 @@ so we don't always force a configure-requires on CMR.
 ----------------
 
 
- methods not yet defined:
- has_compiler()
+methods not yet defined:
+- has_compiler()
 
 
 ---------------
@@ -97,8 +97,7 @@ so we don't always force a configure-requires on CMR.
  check for other minimums too.
 
 
- all known users of [MakeMaker::Custom]:
- ETHER/B-Hooks-EndOfScope
+all known users of [MakeMaker::Custom]:
  https://metacpan.org/release/CJM/PostScript-Report-0.13
  https://metacpan.org/release/CJM/PostScript-ScheduleGrid-0.04
  https://metacpan.org/release/CJM/Win32-Setupsup-1.12
