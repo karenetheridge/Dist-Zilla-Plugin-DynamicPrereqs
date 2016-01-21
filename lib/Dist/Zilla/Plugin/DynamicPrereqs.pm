@@ -551,13 +551,15 @@ upstream users, but I obviously cannot do this for DarkPAN users. Regardless,
 please contact me (see below) and I will keep you directly advised of
 interface changes.
 
-Future options may include:
+Future planned features:
+
+=for stopwords CPANFile
 
 =for :list
-* C<-phase> the phase in which subsequently-specified module/version pairs will be added
-* C<-runtime> a module and version that is added to runtime prereqs should the C<-condition> be satisfied
-* C<-test> a module and version that is added to test prereqs should the C<-condition> be satisfied
-* C<-build> a module and version that is added to build prereqs should the C<-condition> be satisfied
+* better compiler detection and conditional XS code inclusion
+* interoperability with the L<[CPANFile]|Dist::Zilla::Plugin::CPANFile> plugin (generation of dynamic prerequisites into a F<cpanfile>)
+* something like C<is_perl_at_least('5.008001')> for testing C<$]>
+* inlining of sub content for some checks, to allow constant folding (e.g. C<$^O> and C<$]> checks)
 
 =head1 SEE ALSO
 
