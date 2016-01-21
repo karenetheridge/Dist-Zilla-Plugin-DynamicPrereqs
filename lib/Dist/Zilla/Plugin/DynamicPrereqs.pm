@@ -486,11 +486,11 @@ Available subs are:
 
 * C<can_run()> - check if we can run some command
 
-* C<can_use($module, $version (optional))> - checks if a module
+* C<can_use($module [, $version ])> - checks if a module
   (optionally, at a specified version) can be loaded. (If you don't want to load
   the module, you should use C<< has_module >>, see below.)
 
-* C<has_module($module, $version_or_range (optional))> - checks if a module
+* C<has_module($module [, $version_or_range ])> - checks if a module
   (optionally, at a specified version or matching a L<version
   range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not
   load the module, so is safe to use with modules that have side effects when
@@ -511,18 +511,18 @@ Available subs are:
 * C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >>
   (please keep using the fully-qualified form) to work in Cygwin
 
-* C<runtime_requires($module, $version (optional))> - adds the module to runtime
+* C<runtime_requires($module [, $version ])> - adds the module to runtime
   prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
   Added in 0.016.
 
-* C<requires($module, $version (optional))> - alias for C<runtime_requires>.
+* C<requires($module [, $version ])> - alias for C<runtime_requires>.
   Added in 0.016.
 
-* C<build_requires($module, $version (optional))> - adds the module to runtime
+* C<build_requires($module [, $version ])> - adds the module to runtime
   prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
   Added in 0.016.
 
-* C<test_requires($module, $version (optional))> - adds the module to runtime
+* C<test_requires($module [, $version ])> - adds the module to runtime
   prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
   Added in 0.016.
 
