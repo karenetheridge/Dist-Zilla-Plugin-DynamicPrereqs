@@ -447,7 +447,8 @@ statement, and the C<-raw>/C<-body> lines are contained as the body of the block
     -condition = $] > '5.020'
     -body = requires('1.003000')
 
-results in the F<Makefile.PL> snippet:
+results in the F<Makefile.PL> snippet (note that whitespace is not added, in
+case this affects the parsing:
 
     if ($] > '5.020') {
     requires('Role::Tiny', '1.003000')
