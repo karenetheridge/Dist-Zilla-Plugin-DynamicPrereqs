@@ -15,6 +15,14 @@ use Helper;
 use Test::File::ShareDir
     -share => { -module => { 'Dist::Zilla::Plugin::DynamicPrereqs' => 'share/DynamicPrereqs' } };
 
+# diag uses todo_output if in_todo :/
+no warnings 'redefine';
+*::diag = sub {
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    my $tb = Test::Builder->new;
+    $tb->_print_comment($tb->failure_output, @_);
+};
+
 my $tzil = Builder->from_config(
     { dist_root => 'does-not-exist' },
     {
@@ -42,7 +50,7 @@ is(
     exception { $tzil->build },
     undef,
     'build proceeds normally',
-) or real_diag('got log messages: ', explain $tzil->log_messages);
+) or diag('got log messages: ', explain $tzil->log_messages);
 
 my $build_dir = path($tzil->tempdir)->child('build');
 
@@ -67,7 +75,7 @@ cmp_deeply(
     })),
     'dynamic_config set to 1 in metadata; static prereqs are in place',
 )
-or real_diag("found META.json content:\n", $meta_json);
+or diag("found META.json content:\n", $meta_json);
 
 
 my $file = $build_dir->child('Makefile.PL');
@@ -88,7 +96,7 @@ if eval { require CPAN::Meta; CPAN::Meta->VERSION >= '2.132620' };
 CONTENT
     -1,
     'code inserted into Makefile.PL',
-) or real_diag("found Makefile.PL content:\n", $makefile);
+) or diag("found Makefile.PL content:\n", $makefile);
 
 run_makemaker($tzil);
 
@@ -119,15 +127,7 @@ cmp_deeply(
 )
 or note 'found MYMETA.json content:', $mymeta_json;
 
-real_diag('got log messages: ', explain $tzil->log_messages)
+diag('got log messages: ', explain $tzil->log_messages)
     if not Test::Builder->new->is_passing;
 
 done_testing;
-
-# diag uses todo_output if in_todo :/
-sub real_diag
-{
-    local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my $tb = Test::Builder->new;
-    $tb->_print_comment($tb->failure_output, @_);
-}
