@@ -3,7 +3,7 @@ use warnings;
 
 # almost exactly identical to t/01-basic.t
 
-use Test::More;
+use Test::More 0.88;
 use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::DZil;
 use Test::Fatal;
