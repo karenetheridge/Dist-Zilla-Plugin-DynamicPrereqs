@@ -1,9 +1,9 @@
 use strict;
 use warnings;
 package Dist::Zilla::Plugin::DynamicPrereqs;
+# vim: set ts=8 sts=4 sw=4 tw=115 et :
 # ABSTRACT: Specify dynamic (user-side) prerequisites for your distribution
 # KEYWORDS: plugin distribution metadata MYMETA prerequisites Makefile.PL dynamic
-# vim: set ts=8 sts=4 sw=4 tw=115 et :
 
 our $VERSION = '0.020';
 
