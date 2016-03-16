@@ -182,7 +182,7 @@ has _header => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        "# inserted by " . blessed($self) . ' ' . $self->VERSION;
+        '# inserted by ' . blessed($self) . ' ' . $self->VERSION;
     },
 );
 
