@@ -95,6 +95,10 @@ sub BUILD
 {
     my ($self, $args) = @_;
 
+    $self->log_fatal('[MakeMaker::Awesome] must be at least version 0.19 to be used with [DynamicPrereqs]')
+        if $INC{module_notional_filename('Dist::Zilla::Plugin::MakeMaker::Awesome')}
+            and not eval { Dist::Zilla::Plugin::MakeMaker::Awesome->VERSION('0.19') };
+
     my %extra_args = %$args;
     delete @extra_args{ map { $_->name } $self->meta->get_all_attributes };
     if (my @keys = keys %extra_args)
@@ -132,10 +136,6 @@ my %included_subs;
 sub setup_installer
 {
     my $self = shift;
-
-    $self->log_fatal('[MakeMaker::Awesome] must be at least version 0.19 to be used with [DynamicPrereqs]')
-        if $INC{module_notional_filename('Dist::Zilla::Plugin::MakeMaker::Awesome')}
-            and not eval { Dist::Zilla::Plugin::MakeMaker::Awesome->VERSION('0.19') };
 
     my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};
     $self->log_fatal('No Makefile.PL found!') if not $file;
