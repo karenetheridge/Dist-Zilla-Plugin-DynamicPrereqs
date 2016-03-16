@@ -1,4 +1,10 @@
 
+11:52 < haarg> ether: would still like some way to use ExtUtils::HasCompiler easily via DynamicPrereqs.  including stuffing the module into inc/
+11:58 <%ether> on the list
+11:58 < haarg> cool
+11:58 <%ether> that's in the "will get heavily yelled at" zone so I'm hesitant to make changes without a lot of buy-in and review first
+
+
 
 -----------------
 
