@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
+{{$NEXT}}
+
 0.020     2016-03-16 02:42:30Z (TRIAL RELEASE)
           - perform Makefile.PL content modification at the proper time (as a
             FileMunger, rather than InstallTool)
