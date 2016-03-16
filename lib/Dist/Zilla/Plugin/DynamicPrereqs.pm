@@ -9,7 +9,7 @@ our $VERSION = '0.020';
 
 use Moose;
 with
-    'Dist::Zilla::Role::InstallTool',
+    'Dist::Zilla::Role::FileMunger',
     'Dist::Zilla::Role::MetaProvider',
     'Dist::Zilla::Role::PrereqSource',
     'Dist::Zilla::Role::AfterBuild',
@@ -133,12 +133,12 @@ sub after_build
 # track which subs have already been included by some other instance
 my %included_subs;
 
-sub setup_installer
+sub munge_files
 {
     my $self = shift;
 
     my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};
-    $self->log_fatal('No Makefile.PL found!') if not $file;
+    $self->log_fatal('No Makefile.PL found! Is [MakeMaker] at least version 5.022?') if not $file;
 
     my $content = $file->content;
 
@@ -148,7 +148,7 @@ sub setup_installer
     # TODO: if marker cannot be found, fall back to looking for just
     # %WriteMakefileArgs -- this requires modifying the content too.
     $self->log_fatal('failed to find position in Makefile.PL to munge!')
-        if $content !~ m'^my %FallbackPrereqs = \((?:\n[^;]+^)?\);$'mg;
+        if $content !~ m/^my \{\{ \$fallback_prereqs \}\}$/mg;
 
     my $pos = pos($content);
 
@@ -416,7 +416,7 @@ C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
 C<-body> first became available in version 0.018.
 
-=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build setup_installer register_prereqs
+=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build munge_files register_prereqs
 
 =head2 C<-delimiter>
 

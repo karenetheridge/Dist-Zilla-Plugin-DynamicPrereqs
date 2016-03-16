@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - perform Makefile.PL content modification at the proper time (as a
+            FileMunger, rather than InstallTool)
 
 0.019     2016-01-20 04:43:24Z
           - perl prerequisite lowered to 5.8 (Graham Ollis)
