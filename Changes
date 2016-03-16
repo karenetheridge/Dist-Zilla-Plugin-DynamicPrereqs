@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.021     2016-03-16 20:50:11Z (TRIAL RELEASE)
           - optimize use of blank lines in modified Makefile.PL content
 
 0.020     2016-03-16 02:42:30Z (TRIAL RELEASE)
