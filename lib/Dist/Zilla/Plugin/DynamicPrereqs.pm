@@ -144,13 +144,16 @@ sub munge_files
 
     $self->log_debug('Inserting dynamic prereq into Makefile.PL...');
 
+    # we insert our code just *before* this bit in Makefile.PL
+    my $insertion_breadcrumb = "\n\nunless ( eval { ExtUtils::MakeMaker";
+
     # insert after declarations for BOTH %WriteMakefileArgs, %FallbackPrereqs.
     # TODO: if marker cannot be found, fall back to looking for just
     # %WriteMakefileArgs -- this requires modifying the content too.
     $self->log_fatal('failed to find position in Makefile.PL to munge!')
-        if $content !~ m/^my \{\{ \$fallback_prereqs \}\}$/mg;
+        if $content !~ m/\Q$insertion_breadcrumb/mg;
 
-    my $pos = pos($content);
+    my $pos = pos($content) - length($insertion_breadcrumb);
 
     my $code = join("\n", $self->raw);
     if (my $conditions = join(' && ', $self->conditions))

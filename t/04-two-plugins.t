@@ -63,20 +63,11 @@ isnt(
     index(
         $makefile,
         <<CONTENT),
+);
 
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 \$WriteMakefileArgs{PREREQ_PM}{'Test::More'} = \$FallbackPrereqs{'Test::More'} = '0.123'
 if eval { require Test::More; 1 };
-
-CONTENT
-    -1,
-    'code inserted into Makefile.PL from first plugin',
-) or diag "found Makefile.PL content:\n", $makefile;
-
-isnt(
-    index(
-        $makefile,
-        <<CONTENT),
 
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 \$WriteMakefileArgs{PREREQ_PM}{'strict'} = \$FallbackPrereqs{'strict'} = '0.001'
@@ -84,7 +75,7 @@ if eval { require strict; 1 };
 
 CONTENT
     -1,
-    'code inserted into Makefile.PL from second plugin',
+    'code inserted into Makefile.PL from both plugins, in plugin load order',
 ) or diag "found Makefile.PL content:\n", $makefile;
 
 run_makemaker($tzil);
