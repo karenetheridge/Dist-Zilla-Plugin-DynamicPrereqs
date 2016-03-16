@@ -82,6 +82,7 @@ isnt(
     index(
         $makefile,
         <<CONTENT),
+);
 
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 foo();

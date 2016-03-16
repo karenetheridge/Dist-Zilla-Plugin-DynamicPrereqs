@@ -89,6 +89,8 @@ isnt(
     index(
         $makefile,
         <<CONTENT),
+);
+
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 \$WriteMakefileArgs{PREREQ_PM}{'Dist::Zilla'} = \$FallbackPrereqs{'Dist::Zilla'} = '4.300039'
 if eval { require CPAN::Meta; CPAN::Meta->VERSION >= '2.132620' };

@@ -157,13 +157,13 @@ sub munge_files
     {
         $code = "if ($conditions) {\n"
             . $code . "\n"
-            . '}';
+            . '}' . "\n";
     }
 
     $content = substr($content, 0, $pos)
-        . "\n\n"
+        . "\n"
         . $self->_header . "\n"
-        . $code
+        . $code . "\n"
         . substr($content, $pos);
 
     $content =~ s/\n+\z/\n/;

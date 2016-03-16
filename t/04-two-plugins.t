@@ -63,6 +63,7 @@ isnt(
     index(
         $makefile,
         <<CONTENT),
+
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 \$WriteMakefileArgs{PREREQ_PM}{'Test::More'} = \$FallbackPrereqs{'Test::More'} = '0.123'
 if eval { require Test::More; 1 };
@@ -76,6 +77,7 @@ isnt(
     index(
         $makefile,
         <<CONTENT),
+
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 \$WriteMakefileArgs{PREREQ_PM}{'strict'} = \$FallbackPrereqs{'strict'} = '0.001'
 if eval { require strict; 1 };

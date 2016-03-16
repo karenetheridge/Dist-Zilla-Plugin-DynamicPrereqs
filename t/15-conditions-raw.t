@@ -57,6 +57,8 @@ isnt(
     index(
         $makefile,
         <<CONTENT),
+);
+
 # inserted by Dist::Zilla::Plugin::DynamicPrereqs $version
 if (can_run('perlmagick') && 1 == 2) {
   \$WriteMakefileArgs{PREREQ_PM}{'Image::Magick'} = \$FallbackPrereqs{'Image::Magick'} = '0.123';
