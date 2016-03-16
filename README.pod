@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.019
+version 0.020
 
 =head1 SYNOPSIS
 
@@ -26,7 +26,6 @@ or:
     -delimiter = |
     -raw = |test_requires('Devel::Cover')
     -raw = |    if $ENV{EXTENDED_TESTING} or is_smoker();
-    -include_sub = is_smoker
 
 or:
 
@@ -87,7 +86,7 @@ C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
 C<-body> first became available in version 0.018.
 
-=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build setup_installer register_prereqs
+=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build munge_files register_prereqs
 
 =head2 C<-delimiter>
 
@@ -131,7 +130,8 @@ statement, and the C<-raw>/C<-body> lines are contained as the body of the block
     -condition = $] > '5.020'
     -body = requires('1.003000')
 
-results in the F<Makefile.PL> snippet:
+results in the F<Makefile.PL> snippet (note that whitespace is not added, in
+case this affects the parsing:
 
     if ($] > '5.020') {
     requires('Role::Tiny', '1.003000')
@@ -169,7 +169,7 @@ C<parse_args()> - returns the hashref of options that were passed as arguments t
 
 =item *
 
-C<can_xs()> - Secondary compile testing via ExtUtils::CBuilder
+C<can_xs()> - Secondary compile testing via L<ExtUtils::CBuilder>
 
 =item *
 
@@ -181,11 +181,11 @@ C<can_run()> - check if we can run some command
 
 =item *
 
-C<can_use($module, $version (optional))> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
+C<can_use($module [, $version ])> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
 
 =item *
 
-C<has_module($module, $version_or_range (optional))> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.  When passed a second argument, returns true or false; otherwise, returns undef or the module's C<$VERSION>. (Current API available since version 0.015.)
+C<has_module($module [, $version_or_range ])> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.  When passed a second argument, returns true or false; otherwise, returns undef or the module's C<$VERSION>. (Current API available since version 0.015.)
 
 =item *
 
@@ -213,29 +213,31 @@ C<maybe_command> - actually a monkeypatch to C<< MM->maybe_command >> (please ke
 
 =item *
 
-C<runtime_requires($module, $version (optional))> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
+C<runtime_requires($module [, $version ])> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
 
 =item *
 
-C<requires($module, $version (optional))> - alias for C<runtime_requires>. Added in 0.016.
+C<requires($module [, $version ])> - alias for C<runtime_requires>. Added in 0.016.
 
 =item *
 
-C<build_requires($module, $version (optional))> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
+C<build_requires($module [, $version ])> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
 
 =item *
 
-C<test_requires($module, $version (optional))> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
+C<test_requires($module [, $version ])> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
 
 =back
 
 =head1 WARNING: INCOMPLETE SUBROUTINE IMPLEMENTATIONS!
 
 The implementations for some subroutines (in particular, C<can_xs>, C<can_cc>
-and C<can_run> are still incomplete, incompatible with some architectures and
+and C<can_run> are still works in progress, incompatible with some architectures and
 cannot yet be considered a suitable generic solution. Until we are more
 confident in their implementations, a warning will be printed upon use, and
-their use B<is not advised> without prior consultation with the author.
+their use B<is not advised> without prior consultation with the author and
+other members of the Perl Toolchain Gang
+(see L<C<#toolchain> on C<irc.perl.org>|irc://irc.perl.org/#toolchain>).
 
 =head1 WARNING: UNSTABLE API!
 
@@ -250,25 +252,27 @@ upstream users, but I obviously cannot do this for DarkPAN users. Regardless,
 please contact me (see below) and I will keep you directly advised of
 interface changes.
 
-Future options may include:
+Future planned features:
+
+=for stopwords CPANFile
 
 =over 4
 
 =item *
 
-C<-phase> the phase in which subsequently-specified module/version pairs will be added
+better compiler detection and conditional XS code inclusion
 
 =item *
 
-C<-runtime> a module and version that is added to runtime prereqs should the C<-condition> be satisfied
+interoperability with the L<[CPANFile]|Dist::Zilla::Plugin::CPANFile> plugin (generation of dynamic prerequisites into a F<cpanfile>)
 
 =item *
 
-C<-test> a module and version that is added to test prereqs should the C<-condition> be satisfied
+something like C<is_perl_at_least('5.008001')> for testing C<$]>
 
 =item *
 
-C<-build> a module and version that is added to build prereqs should the C<-condition> be satisfied
+inlining of sub content for some checks, to allow constant folding (e.g. C<$^O> and C<$]> checks)
 
 =back
 
@@ -307,7 +311,7 @@ There is also a mailing list available for users of this distribution, at
 L<http://dzil.org/#mailing-list>.
 
 There is also an irc channel available for users of this distribution, at
-L<irc://irc.perl.org/#distzilla>.
+L<C<#distzilla> on C<irc.perl.org>|irc://irc.perl.org/#distzilla>.
 
 I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 
