@@ -9,6 +9,9 @@ use Path::Tiny;
 use Test::Deep;
 use Test::Deep::JSON;
 
+# TODO: this should be put in a bunch of other tests too probably
+use Test::Requires { 'Dist::Zilla::Plugin::MakeMaker' => 5.022 };
+
 use lib 't/lib';
 use Helper;
 
