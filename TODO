@@ -4,7 +4,26 @@
 11:58 < haarg> cool
 11:58 <%ether> that's in the "will get heavily yelled at" zone so I'm hesitant to make changes without a lot of buy-in and review first
 
+see https://github.com/houseabsolute/List-SomeUtils/blob/master/inc/MyMakeMaker.pm#L12-L15
+use ExtUtils::HasCompiler qw( can_compile_loadable_object );
+if ( can_compile_loadable_object( quiet => 1 ) ) {
+    $WriteMakefileArgs{PREREQ_PM}{'List::SomeUtils::XS'} = 0;
+}
 
+
+    use ExtUtils::HasCompiler qw(can_compile_loadable_object);
+    my $has_xs = !parse_args()->{PUREPERL_ONLY} || can_compile_loadable_object(quiet => 1) ? 1 : 0;
+
+sub want_pp { parse_args()->{PUREPERL_ONLY} ? 1 : 0 }  ???
+
+    with 'Dist::Zilla::Role::ModuleIncluder', 'Dist::Zilla::Role::FileGatherer';
+    sub gather_files {
+        my $self = shift;
+
+        return if none { $_ eq '...' } $self->_all_required_subs;
+        # ... update %included_subs earlier to account for other coexisting plugins
+        $self->include_modules('ExtUtils::HasCompiler', '5.006');
+    }
 
 -----------------
 
