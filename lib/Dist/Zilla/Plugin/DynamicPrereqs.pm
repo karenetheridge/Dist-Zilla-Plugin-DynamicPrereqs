@@ -15,7 +15,7 @@ with
     'Dist::Zilla::Role::AfterBuild',
     'Dist::Zilla::Role::TextTemplate',
 ;
-use List::Util 1.33 qw(first notall any);
+use List::Util 1.45 qw(first notall any uniq);
 use Module::Runtime 'module_notional_filename';
 use Try::Tiny;
 use Path::Tiny;
@@ -299,7 +299,7 @@ has _all_required_subs => (
                 any { /\b$sub_name\b\(/ } @code
             } map { $_->basename } path($self->_include_sub_root)->children;
 
-        [ sort($self->_all_required_subs_for(_uniq(
+        [ sort($self->_all_required_subs_for(uniq(
             $self->include_subs, @subs_in_code,
         ))) ];
     },
@@ -335,8 +335,6 @@ sub _warn_include_subs
     $self->log(colored('The use of ' . $_ . ' is not advised. Please consult the documentation!', 'bright_yellow'))
         foreach grep { exists $warn_include_sub{$_} } @include_subs;
 }
-
-sub _uniq { keys %{ +{ map { $_ => undef } @_ } } }
 
 __PACKAGE__->meta->make_immutable;
 __END__
