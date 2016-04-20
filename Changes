@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - can_xs() is now implemented with ExtUtils::HasCompiler, rather
+            than ExtUtils::CBuilder
 
 0.023     2016-04-21 10:44:21Z
           - really fix all remaining tests that require newer MakeMaker

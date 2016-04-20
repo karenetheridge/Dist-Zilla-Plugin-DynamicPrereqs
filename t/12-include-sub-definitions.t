@@ -10,6 +10,8 @@ use Test::Deep;
 use Term::ANSIColor 2.01 'colorstrip';
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
+use Test::Requires { 'ExtUtils::HasCompiler' => '0.013' };
+
 # this time, we use our real sub definitions
 use Test::File::ShareDir
     -share => { -module => { 'Dist::Zilla::Plugin::DynamicPrereqs' => 'share/DynamicPrereqs' } };
@@ -61,13 +63,16 @@ cmp_deeply(
             configure => {
                 requires => {
                     'ExtUtils::MakeMaker' => ignore,
-                    'ExtUtils::CBuilder' => '0.27',
                     'Config' => '0',
                     'File::Spec' => 0,
-                    'File::Temp' => '0',
                     'Text::ParseWords' => '0',
                     'Module::Metadata' => '0',
                     'CPAN::Meta::Requirements' => '2.120620',
+                },
+            },
+            develop => {
+                requires => {
+                    'ExtUtils::HasCompiler' => '0.013',
                 },
             },
         },
@@ -101,6 +106,9 @@ run_makemaker($tzil);
         'Makefile.PL defined all required subroutines',
     ) or diag 'Makefile.PL defined symbols: ', explain \%{'main::MyTestMakeMaker::'};
 }
+
+my $inc_file = $build_dir->child(qw(inc ExtUtils HasCompiler.pm));
+ok(-e $inc_file, 'inlined module added to distribution');
 
 diag 'got log messages: ', explain $tzil->log_messages
     if not Test::Builder->new->is_passing;

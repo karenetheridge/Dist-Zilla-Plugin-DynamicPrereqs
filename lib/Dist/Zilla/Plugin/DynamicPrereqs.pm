@@ -9,6 +9,9 @@ our $VERSION = '0.024';
 
 use Moose;
 with
+    'Dist::Zilla::Role::FileGatherer',
+    'Dist::Zilla::Role::ModuleIncluder',
+    'Dist::Zilla::Role::ModuleMetadata',
     'Dist::Zilla::Role::FileMunger',
     'Dist::Zilla::Role::MetaProvider',
     'Dist::Zilla::Role::PrereqSource',
@@ -228,11 +231,8 @@ sub _build__sub_definitions
     return $content;
 }
 
+
 my %sub_prereqs = (
-    can_xs => {
-        'ExtUtils::CBuilder' => '0.27',
-        'File::Temp' => '0',
-    },
     can_cc => {
         'Config' => '0',
     },
@@ -249,19 +249,70 @@ my %sub_prereqs = (
     },
 );
 
+# instead of including these dependencies in configure-requires, we inline
+# them right into the distribution in inc/.
+my %sub_inc_dependencies = (
+    can_xs => {
+        'ExtUtils::HasCompiler' => '0.013',
+    },
+);
+
+sub gather_files {
+    my $self = shift;
+
+    foreach my $required_sub ($self->_all_required_subs)
+    {
+        # FIXME: update %included_subs earlier to account for other coexisting
+        # plugins, or running two instances of the plugin will try to do this twice.
+        my $include_modules = $sub_inc_dependencies{$required_sub} || {};
+        foreach my $module (keys %$include_modules)
+        {
+            (my $path = $module) =~ s{::}{/}g;
+            $path = path('inc', $path . '.pm');
+
+            my $file = (first { $_->name eq $path } @{ $self->zilla->files })
+                # TODO this requires a new release of ModuleIncluder
+                # || ($self->include_modules([ $module ], '5.006'))[0];
+                || do {
+                    $self->log([ 'inlining %s into inc/', $module ]);
+                    $self->include_modules([ $module ], version->new('5.006'));
+                    first { $_->name eq $path } @{ $self->zilla->files };
+                };
+
+            if (defined $include_modules->{$module} and $include_modules->{$module} > 0)
+            {
+                my $mmd = $self->module_metadata_for_file($file);
+                $self->log_fatal([ '%s version %s required--only found version %s',
+                        $module, $include_modules->{$module},
+                        (defined $mmd->version ? $mmd->version->stringify : 'undef') ])
+                    if ($mmd->version || 0) < $include_modules->{$module};
+            }
+        }
+    }
+}
+
 sub register_prereqs
 {
     my $self = shift;
     foreach my $required_sub ($self->_all_required_subs)
     {
-        my $prereqs = $sub_prereqs{$required_sub};
+        my $configure_prereqs = $sub_prereqs{$required_sub} || {};
         $self->zilla->register_prereqs(
             {
                 phase => 'configure',
                 type  => 'requires',
             },
-            %$prereqs,
-        ) if $prereqs and %$prereqs;
+            %$configure_prereqs,
+        ) if %$configure_prereqs;
+
+        my $develop_prereqs = $sub_inc_dependencies{$required_sub} || {};
+        $self->zilla->register_prereqs(
+            {
+                phase => 'develop',
+                type  => 'requires',
+            },
+            %$develop_prereqs,
+        ) if %$develop_prereqs;
     }
 }
 
@@ -276,7 +327,6 @@ has _include_sub_root => (
 
 # indicates subs that require other subs to be included
 my %sub_dependencies = (
-    can_xs => [ qw(can_cc) ],
     can_cc => [ qw(can_run) ],
     can_run => [ qw(maybe_command) ],
     requires => [ qw(runtime_requires) ],
@@ -417,7 +467,7 @@ C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
 C<-body> first became available in version 0.018.
 
-=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build munge_files register_prereqs
+=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build munge_files register_prereqs gather_files
 
 =head2 C<-delimiter>
 
@@ -495,7 +545,7 @@ Available subs are:
 * C<parse_args()> - returns the hashref of options that were passed as
   arguments to C<perl Makefile.PL>
 
-* C<can_xs()> - Secondary compile testing via L<ExtUtils::CBuilder>
+* C<can_xs()> - XS capability testing via L<ExtUtils::HasCompiler>
 
 * C<can_cc()> - can we locate a (the) C compiler
 

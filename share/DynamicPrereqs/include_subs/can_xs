@@ -1,61 +1,9 @@
-sub can_xs {
-  # Do we have the configure_requires checker?
-  unless (eval 'require ExtUtils::CBuilder; ExtUtils::CBuilder->VERSION(0.27); 1') {
-    # They don't obey configure_requires, so it is someone old and delicate.
-    # Try to avoid hurting them by falling back to an older simpler test.
-    return can_cc();
+use lib 'inc';
+use ExtUtils::HasCompiler 0.013 'can_compile_loadable_object';
+{
+  my $can_xs;
+  sub can_xs {
+    return $can_xs if defined $can_xs;
+    $can_xs = can_compile_loadable_object(quiet => 1) ? 1 : 0;
   }
-
-  # Do we have a working C compiler
-  my $builder = ExtUtils::CBuilder->new(quiet => 1);
-  unless ( $builder->have_compiler ) {
-    # No working C compiler
-    return 0;
-  }
-
-  # Write a C file representative of what XS becomes
-  require File::Temp;
-  my ( $FH, $tmpfile ) = File::Temp::tempfile(
-    "compilexs-XXXXX",
-    SUFFIX => '.c',
-  );
-  binmode $FH;
-  print $FH <<'END_C';
-#include "EXTERN.h"
-#include "perl.h"
-#include "XSUB.h"
-
-int main(int argc, char **argv) {
-    return 0;
-}
-
-int boot_sanexs() {
-    return 1;
-}
-
-END_C
-  close $FH;
-
-  # Can the C compiler access the same headers XS does
-  my @libs   = ();
-  my $object = undef;
-  eval {
-    local $^W = 0;
-    $object = $builder->compile(
-      source => $tmpfile,
-    );
-    @libs = $builder->link(
-      objects     => $object,
-      module_name => 'sanexs',
-    );
-  };
-  my $result = $@ ? 0 : 1;
-
-  # Clean up all the build files
-  foreach ( $tmpfile, $object, @libs ) {
-    next unless defined $_;
-    1 while unlink;
-  }
-
-  return $result;
 }
