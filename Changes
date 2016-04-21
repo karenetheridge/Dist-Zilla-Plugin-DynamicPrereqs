@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.023     2016-04-21 10:44:21Z
           - really fix all remaining tests that require newer MakeMaker
             behaviour
 
