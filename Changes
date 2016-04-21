@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.025     2016-04-21 15:18:58Z (TRIAL RELEASE)
           - bumped up "background perl" used in ExtUtils::HasCompiler
             inlining, to avoid inlining File::Temp and its dependencies
 
