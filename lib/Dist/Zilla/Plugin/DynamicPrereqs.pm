@@ -272,10 +272,10 @@ sub gather_files {
 
             my $file = (first { $_->name eq $path } @{ $self->zilla->files })
                 # TODO this requires a new release of ModuleIncluder
-                # || ($self->include_modules([ $module ], '5.006'))[0];
+                # || ($self->include_modules([ $module ], '5.006001'))[0];
                 || do {
                     $self->log([ 'inlining %s into inc/', $module ]);
-                    $self->include_modules([ $module ], version->new('5.006'));
+                    $self->include_modules([ $module ], version->new('5.006001'));
                     first { $_->name eq $path } @{ $self->zilla->files };
                 };
 

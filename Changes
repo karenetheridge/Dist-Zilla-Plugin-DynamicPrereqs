@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - bumped up "background perl" used in ExtUtils::HasCompiler
+            inlining, to avoid inlining File::Temp and its dependencies
 
 0.024     2016-04-21 11:07:53Z (TRIAL RELEASE)
           - can_xs() is now implemented with ExtUtils::HasCompiler, rather
