@@ -48,7 +48,7 @@ is(
 cmp_deeply(
     [ map { colorstrip($_) } @{ $tzil->log_messages } ],
     supersetof(
-        map { re(qr/^\Q[DynamicPrereqs] The use of $_ is not advised. Please consult the documentation!\E$/) } qw(can_cc can_run can_xs),
+        map { re(qr/^\Q[DynamicPrereqs] Use $_ with great care! Please consult the documentation!\E$/) } qw(can_cc can_run can_xs),
     ),
     'warning printed for unstable sub implementations',
 ) or diag 'got log messages: ', explain $tzil->log_messages;

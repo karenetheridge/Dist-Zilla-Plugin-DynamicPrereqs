@@ -383,7 +383,7 @@ sub _warn_include_subs
 {
     my ($self, @include_subs) = @_;
 
-    $self->log(colored('The use of ' . $_ . ' is not advised. Please consult the documentation!', 'bright_yellow'))
+    $self->log(colored('Use ' . $_ . ' with great care! Please consult the documentation!', 'bright_yellow'))
         foreach grep { exists $warn_include_sub{$_} } @include_subs;
 }
 
