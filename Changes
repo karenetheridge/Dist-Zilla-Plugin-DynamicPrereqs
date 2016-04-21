@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.024     2016-04-21 11:07:53Z (TRIAL RELEASE)
           - can_xs() is now implemented with ExtUtils::HasCompiler, rather
             than ExtUtils::CBuilder
           - new helper sub: want_pp, for use with can_xs

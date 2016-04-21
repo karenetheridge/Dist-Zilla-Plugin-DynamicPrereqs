@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.023
+version 0.024
 
 =head1 SYNOPSIS
 
@@ -16,7 +16,7 @@ In your F<dist.ini>:
 
     [DynamicPrereqs]
     -condition = has_module('Role::Tiny')
-    -condition = !parse_args()->{PUREPERL_ONLY}
+    -condition = !want_pp()
     -condition = can_xs()
     -body = requires('Role::Tiny', '1.003000')
 
@@ -86,7 +86,7 @@ C<[Prereqs / ConfigureRequires]> in your F<dist.ini>).
 
 C<-body> first became available in version 0.018.
 
-=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build munge_files register_prereqs
+=for Pod::Coverage mvp_multivalue_args mvp_aliases BUILD metadata after_build munge_files register_prereqs gather_files
 
 =head2 C<-delimiter>
 
@@ -169,7 +169,7 @@ C<parse_args()> - returns the hashref of options that were passed as arguments t
 
 =item *
 
-C<can_xs()> - Secondary compile testing via L<ExtUtils::CBuilder>
+C<can_xs()> - XS capability testing via L<ExtUtils::HasCompiler> (don't forget to also check C<want_pp>!)
 
 =item *
 
@@ -226,6 +226,10 @@ C<build_requires($module [, $version ])> - adds the module to runtime prereqs (a
 =item *
 
 C<test_requires($module [, $version ])> - adds the module to runtime prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly). Added in 0.016.
+
+=item *
+
+C<want_pp> - true if the user or CPAN client explicitly specified PUREPERL_ONLY (indicating that no XS-requiring modules or code should be installed)
 
 =back
 
