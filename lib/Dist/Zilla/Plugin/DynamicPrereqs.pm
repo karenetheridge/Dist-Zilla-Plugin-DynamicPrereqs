@@ -333,6 +333,7 @@ my %sub_dependencies = (
     runtime_requires => [ qw(_add_prereq) ],
     build_requires => [ qw(_add_prereq) ],
     test_requires => [ qw(_add_prereq) ],
+    want_pp => [ qw(parse_args) ],
 );
 
 has _all_required_subs => (
@@ -397,7 +398,7 @@ In your F<dist.ini>:
 
     [DynamicPrereqs]
     -condition = has_module('Role::Tiny')
-    -condition = !parse_args()->{PUREPERL_ONLY}
+    -condition = !want_pp()
     -condition = can_xs()
     -body = requires('Role::Tiny', '1.003000')
 
@@ -545,7 +546,7 @@ Available subs are:
 * C<parse_args()> - returns the hashref of options that were passed as
   arguments to C<perl Makefile.PL>
 
-* C<can_xs()> - XS capability testing via L<ExtUtils::HasCompiler>
+* C<can_xs()> - XS capability testing via L<ExtUtils::HasCompiler> (don't forget to also check C<want_pp>!)
 
 * C<can_cc()> - can we locate a (the) C compiler
 
@@ -590,6 +591,9 @@ Available subs are:
 * C<test_requires($module [, $version ])> - adds the module to runtime
   prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
   Added in 0.016.
+
+* C<want_pp> - true if the user or CPAN client explicitly specified PUREPERL_ONLY
+  (indicating that no XS-requiring modules or code should be installed)
 
 =end :list
 

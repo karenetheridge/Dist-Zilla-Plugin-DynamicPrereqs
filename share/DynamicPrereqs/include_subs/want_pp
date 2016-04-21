@@ -1,0 +1,3 @@
+sub want_pp {
+  parse_args()->{PUREPERL_ONLY} ? 1 : 0
+}

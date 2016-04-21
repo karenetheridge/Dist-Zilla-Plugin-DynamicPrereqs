@@ -12,11 +12,6 @@ EUHC: patch
 
 -----------------
 
-    sub want_pp { parse_args()->{PUREPERL_ONLY} ? 1 : 0 }  ???
-
-
------------------
-
 
 ; patch MI::Can, Devel::CheckBin with updates that I develop here.
     (or ensure they depend on fixed versions - maybe_command needs 6.51_01, 6.69_04)
@@ -35,9 +30,6 @@ include_subs definitions:
     for...
  - https://metacpan.org/source/HAARG/Devel-GlobalDestruction-0.13/Makefile.PL#L121
 
-- can_xs (or the high level wrapper) etc needs to also check parse_args->{PUREPERLONLY} [sp] and never
-allow xs installations if this is set.
-    -> use leont's ExtUtils::HasCompiler, when written.
 
 
 new sub: is_perl_version, or has_perl -- which checks $]
