@@ -7,8 +7,9 @@ use Test::DZil;
 use Test::Fatal;
 use Path::Tiny;
 
-# %FallbackPrereqs weren't included by MMA until 0.19
-use Test::Requires { 'Dist::Zilla::Plugin::MakeMaker::Awesome' => '0.19' };
+# %FallbackPrereqs weren't included by MMA until 0.19; 0.38 made whitespacing
+# more consistent
+use Test::Requires { 'Dist::Zilla::Plugin::MakeMaker::Awesome' => '0.38' };
 
 use Test::File::ShareDir
     -share => { -module => { 'Dist::Zilla::Plugin::DynamicPrereqs' => 'share/DynamicPrereqs' } };
