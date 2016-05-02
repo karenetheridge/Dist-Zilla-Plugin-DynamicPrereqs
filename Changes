@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - bundled an updated ExtUtils::HasCompiler for can_xs(), to support
+            building with a noexec $TMPDIR.
 
 0.026     2016-04-22 09:54:05Z (TRIAL RELEASE)
           - bump version of [MakeMaker::Awesome] needed for optional tests, to

@@ -253,7 +253,7 @@ my %sub_prereqs = (
 # them right into the distribution in inc/.
 my %sub_inc_dependencies = (
     can_xs => {
-        'ExtUtils::HasCompiler' => '0.013',
+        'ExtUtils::HasCompiler' => '0.014',
     },
 );
 

@@ -10,7 +10,7 @@ use Test::Deep;
 use Term::ANSIColor 2.01 'colorstrip';
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
-use Test::Requires { 'ExtUtils::HasCompiler' => '0.013' };
+use Test::Requires { 'ExtUtils::HasCompiler' => '0.014' };
 
 # this time, we use our real sub definitions
 use Test::File::ShareDir
@@ -72,7 +72,7 @@ cmp_deeply(
             },
             develop => {
                 requires => {
-                    'ExtUtils::HasCompiler' => '0.013',
+                    'ExtUtils::HasCompiler' => '0.014',
                 },
             },
         },

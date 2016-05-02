@@ -1,5 +1,5 @@
 use lib 'inc';
-use ExtUtils::HasCompiler 0.013 'can_compile_loadable_object';
+use ExtUtils::HasCompiler 0.014 'can_compile_loadable_object';
 {
   my $can_xs;
   sub can_xs {
