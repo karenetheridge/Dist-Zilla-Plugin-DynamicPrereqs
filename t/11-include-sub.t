@@ -6,7 +6,7 @@ use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::DZil;
 use Test::Fatal;
 use Path::Tiny;
-use PadWalker ();
+use PadWalker 'closed_over';
 use Test::Deep;
 use Test::File::ShareDir ();
 
@@ -36,11 +36,11 @@ Test::File::ShareDir->import(
     -share => { -module => { 'Dist::Zilla::Plugin::DynamicPrereqs' => 'share' } },
 );
 
-my $sub_dependencies = PadWalker::closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::_all_required_subs_for)->{'%sub_dependencies'};
+my $sub_dependencies = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::_all_required_subs_for)->{'%sub_dependencies'};
 $sub_dependencies->{foo} = [ qw(bar) ];
 $sub_dependencies->{bar} = [ qw(baz) ];
 
-my $sub_prereqs = PadWalker::closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::register_prereqs)->{'%sub_prereqs'};
+my $sub_prereqs = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::register_prereqs)->{'%sub_prereqs'};
 $sub_prereqs->{baz} = { 'POSIX' => '0' };
 
 

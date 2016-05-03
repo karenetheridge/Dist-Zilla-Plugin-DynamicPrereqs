@@ -6,7 +6,7 @@ use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::DZil;
 use Test::Fatal;
 use Path::Tiny;
-use PadWalker ();
+use PadWalker 'closed_over';
 use Test::Deep;
 use Test::File::ShareDir ();
 
@@ -45,7 +45,7 @@ sub tzil
 {
     my $tzil = tzil();
 
-    my $sub_inc_dependencies = PadWalker::closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::gather_files)->{'%sub_inc_dependencies'};
+    my $sub_inc_dependencies = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::gather_files)->{'%sub_inc_dependencies'};
     $sub_inc_dependencies->{foo} = { 'Does::Not::Exist' => '0' };
 
     $tzil->chrome->logger->set_debug(1);
@@ -64,7 +64,7 @@ sub tzil
 
     my ($strict_version, $stricter_version) = (strict->VERSION, strict->VERSION * 2);
 
-    my $sub_inc_dependencies = PadWalker::closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::gather_files)->{'%sub_inc_dependencies'};
+    my $sub_inc_dependencies = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::gather_files)->{'%sub_inc_dependencies'};
     $sub_inc_dependencies->{foo} = { 'strict' => $stricter_version };
 
     $tzil->chrome->logger->set_debug(1);
@@ -81,7 +81,7 @@ sub tzil
 {
     my $tzil = tzil();
 
-    my $sub_inc_dependencies = PadWalker::closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::gather_files)->{'%sub_inc_dependencies'};
+    my $sub_inc_dependencies = closed_over(\&Dist::Zilla::Plugin::DynamicPrereqs::gather_files)->{'%sub_inc_dependencies'};
     $sub_inc_dependencies->{foo} = { 'Inlined::Module' => '1.23' };
 
     $tzil->chrome->logger->set_debug(1);
