@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.027     2016-05-03 00:42:24Z (TRIAL RELEASE)
           - bundled an updated ExtUtils::HasCompiler for can_xs(), to support
             building with a noexec $TMPDIR.
 
