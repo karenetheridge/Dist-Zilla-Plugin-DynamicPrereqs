@@ -269,18 +269,21 @@ sub gather_files {
         {
             (my $path = $module) =~ s{::}{/}g;
             $path = path('inc', $path . '.pm');
+            my $cpath = $path->canonpath;
 
-            my $file = (first { $_->name eq $path } @{ $self->zilla->files })
+            my $file = (first { $_->name eq $path or $_->name eq $cpath } @{ $self->zilla->files })
                 # TODO this requires a new release of ModuleIncluder
-                # || ($self->include_modules([ $module ], '5.006001'))[0];
+                # || ($self->include_modules([ $module ], version->new('5.006001')))[0];
                 || do {
                     $self->log([ 'inlining %s into inc/', $module ]);
                     $self->include_modules([ $module ], version->new('5.006001'));
-                    first { $_->name eq $path } @{ $self->zilla->files };
+                    first { $_->name eq $path or $_->name eq $cpath } @{ $self->zilla->files };
                 };
+            warn "failed to find $path in files" if not $file;
 
             if (defined $include_modules->{$module} and $include_modules->{$module} > 0)
             {
+                # check that the file we got actually satisfies our dependency
                 my $mmd = $self->module_metadata_for_file($file);
                 $self->log_fatal([ '%s version %s required--only found version %s',
                         $module, $include_modules->{$module},
