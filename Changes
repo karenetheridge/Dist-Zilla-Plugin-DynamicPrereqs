@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.028     2016-05-05 00:53:13Z
           - fix test failure with MSWin32 path separators
 
 0.027     2016-05-03 00:42:24Z (TRIAL RELEASE)
