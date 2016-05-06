@@ -1,6 +1,9 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - temporarily work around Module::CoreList::is_core issue exposed by
+            include_dependencies feature used in
+            Dist::Zilla::Role::ModuleIncluder 0.005 and later
 
 0.028     2016-05-05 00:53:13Z
           - fix test failure with MSWin32 path separators

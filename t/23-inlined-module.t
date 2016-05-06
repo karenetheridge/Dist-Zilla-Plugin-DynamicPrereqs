@@ -160,7 +160,10 @@ CONTENT
             . substr($makefile, $included_subs_index + length($expected_subs));
 
     ok(-e $build_dir->child(qw(inc Inlined Module.pm)), 'inlined module added to distribution');
+TODO: {
+    local $TODO = 'include_dependencies temporarily disabled, pending Module::CoreList fixes...';
     ok(-e $build_dir->child(qw(inc Inlined Dependency.pm)), '...and its dependency too');
+}
 
     cmp_deeply(
         $tzil->log_messages,

@@ -65,6 +65,11 @@ has $_ => (
     default => sub { [] },
 ) foreach qw(include_subs conditions);
 
+# temporary workaround for broken Module::CoreList::is_core
+has '+include_dependencies' => (
+    default => 0,
+) if eval { Dist::Zilla::Role::ModuleIncluder->VERSION('0.005'); 1 };
+
 sub mvp_multivalue_args { qw(raw include_subs conditions) }
 
 sub mvp_aliases { +{
