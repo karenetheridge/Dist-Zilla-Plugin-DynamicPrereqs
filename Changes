@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
+{{$NEXT}}
+
 0.029     2016-05-06 19:40:13Z
           - temporarily work around Module::CoreList::is_core issue exposed by
             include_dependencies feature used in
