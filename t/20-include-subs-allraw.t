@@ -56,7 +56,7 @@ cmp_deeply(
     }),
     'no prereqs added for included subs',
 )
-or diag "found metadata:", explain $tzil->distmeta;
+or diag 'found metadata: ', explain $tzil->distmeta;
 
 my $build_dir = path($tzil->tempdir)->child('build');
 my $file = $build_dir->child('Makefile.PL');
