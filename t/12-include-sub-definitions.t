@@ -107,8 +107,21 @@ run_makemaker($tzil);
     ) or diag 'Makefile.PL defined symbols: ', explain \%{'main::MyTestMakeMaker::'};
 }
 
-my $inc_file = $build_dir->child(qw(inc ExtUtils HasCompiler.pm));
-ok(-e $inc_file, 'inlined module added to distribution');
+my $inc_dir = $build_dir->child('inc');
+my @inc_files;
+my $iter = $inc_dir->iterator({ recurse => 1 });
+while (my $path = $iter->())
+{
+    push @inc_files, $path->relative($build_dir)->stringify if -f $path;
+}
+
+# Note this test breaks with Dist::Zilla::Role::ModuleIncluder 0.006
+cmp_deeply(
+    \@inc_files,
+    [ $inc_dir->child(qw(ExtUtils HasCompiler.pm))->relative($build_dir)->stringify ],
+    'only the one included module is found, with no other dependencies pulled in',
+)
+or diag 'found files in inc: ', explain \@inc_files;
 
 diag 'got log messages: ', explain $tzil->log_messages
     if not Test::Builder->new->is_passing;
