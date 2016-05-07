@@ -556,6 +556,7 @@ Available subs are:
   arguments to C<perl Makefile.PL>
 
 * C<can_xs()> - XS capability testing via L<ExtUtils::HasCompiler> (don't forget to also check C<want_pp>!)
+  Available in this form since 0.029.
 
 * C<can_cc()> - can we locate a (the) C compiler
 
