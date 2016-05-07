@@ -66,6 +66,7 @@ has $_ => (
 ) foreach qw(include_subs conditions);
 
 # temporary workaround for broken Module::CoreList::is_core
+# (see https://rt.perl.org/rt3/Ticket/Display.html?id=128089)
 has '+include_dependencies' => (
     default => 0,
 ) if eval { Dist::Zilla::Role::ModuleIncluder->VERSION('0.005'); 1 };
