@@ -10,7 +10,7 @@ use Test::Deep;
 use Term::ANSIColor 2.01 'colorstrip';
 use Dist::Zilla::Plugin::DynamicPrereqs;
 
-use Test::Requires { 'ExtUtils::HasCompiler' => '0.014' };
+use Test::Needs { 'ExtUtils::HasCompiler' => '0.014' };
 
 # this time, we use our real sub definitions
 use Test::File::ShareDir
