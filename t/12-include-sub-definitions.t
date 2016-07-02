@@ -109,11 +109,10 @@ run_makemaker($tzil);
 
 my $inc_dir = $build_dir->child('inc');
 my @inc_files;
-my $iter = $inc_dir->iterator({ recurse => 1 });
-while (my $path = $iter->())
-{
-    push @inc_files, $path->relative($build_dir)->stringify if -f $path;
-}
+$inc_dir->visit(
+    sub { push @inc_files, $_->relative($build_dir)->stringify if -f },
+    { recurse => 1 },
+);
 
 # Note this test breaks with Dist::Zilla::Role::ModuleIncluder 0.006
 cmp_deeply(
