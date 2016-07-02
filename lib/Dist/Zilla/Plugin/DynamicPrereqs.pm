@@ -10,7 +10,6 @@ our $VERSION = '0.031';
 use Moose;
 with
     'Dist::Zilla::Role::FileGatherer',
-    'Dist::Zilla::Role::ModuleIncluder',
     'Dist::Zilla::Role::ModuleMetadata',
     'Dist::Zilla::Role::FileMunger',
     'Dist::Zilla::Role::MetaProvider',
@@ -64,12 +63,6 @@ has $_ => (
     lazy => 1,
     default => sub { [] },
 ) foreach qw(include_subs conditions);
-
-# temporary workaround for broken Module::CoreList::is_core
-# (see https://rt.perl.org/rt3/Ticket/Display.html?id=128089)
-has '+include_dependencies' => (
-    default => 0,
-) if eval { Dist::Zilla::Role::ModuleIncluder->VERSION('0.005'); 1 };
 
 sub mvp_multivalue_args { qw(raw include_subs conditions) }
 
@@ -277,15 +270,17 @@ sub gather_files {
             $path = path('inc', $path . '.pm');
             my $cpath = $path->canonpath;
 
-            my $file = (first { $_->name eq $path or $_->name eq $cpath } @{ $self->zilla->files })
-                # TODO this requires a new release of ModuleIncluder
-                # || ($self->include_modules([ $module ], version->new('5.006001')))[0];
-                || do {
-                    $self->log([ 'inlining %s into inc/', $module ]);
-                    $self->include_modules([ $module ], version->new('5.006001'));
-                    first { $_->name eq $path or $_->name eq $cpath } @{ $self->zilla->files };
-                };
-            warn "failed to find $path in files" if not $file;
+            my $file = first { $_->name eq $path or $_->name eq $cpath } @{ $self->zilla->files };
+            if (not $file) {
+                $self->log([ 'inlining %s into inc/', $module ]);
+                my $installed_filename = Module::Metadata->find_module_by_name($module)
+                    or $self->log_fatal([ 'Can\'t locate %s', $module ]);
+
+                $file = Dist::Zilla::File::OnDisk->new({ name => $installed_filename });
+                $file->name($path->stringify);
+                $self->add_file($file);
+            }
+            $self->log_fatal([ 'failed to find %s in files', $module ]) if not $file;
 
             if (defined $include_modules->{$module} and $include_modules->{$module} > 0)
             {

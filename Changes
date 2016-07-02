@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - removed dependency on Dist::Zilla::Role::ModuleIncluder by
+            inlining the necessary bits
 
 0.030     2016-07-02 06:34:54Z
           - fixed a test that fails with newer ModuleIncluder, that changed

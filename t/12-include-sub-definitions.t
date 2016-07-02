@@ -114,7 +114,6 @@ $inc_dir->visit(
     { recurse => 1 },
 );
 
-# Note this test breaks with Dist::Zilla::Role::ModuleIncluder 0.006
 cmp_deeply(
     \@inc_files,
     [ $inc_dir->child(qw(ExtUtils HasCompiler.pm))->relative($build_dir)->stringify ],
