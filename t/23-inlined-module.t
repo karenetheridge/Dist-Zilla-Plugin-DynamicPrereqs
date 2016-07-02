@@ -51,7 +51,7 @@ sub tzil
     $tzil->chrome->logger->set_debug(1);
     like(
         exception { $tzil->build },
-        qr/Could not find module Does::Not::Exist/,
+        qr/(?:Could not find module|Can't locate) Does::Not::Exist/,
         'build fails when module to be inlined is not installed',
     ) or diag 'got log messages: ', explain $tzil->log_messages;
 

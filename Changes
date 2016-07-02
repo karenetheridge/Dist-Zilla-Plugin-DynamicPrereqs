@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - fixed a test that fails with newer ModuleIncluder, that changed
+            the text of an error message
 
 0.029     2016-05-06 19:40:13Z
           - temporarily work around Module::CoreList::is_core issue exposed by
