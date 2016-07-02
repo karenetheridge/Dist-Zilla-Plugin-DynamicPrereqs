@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
+{{$NEXT}}
+
 0.030     2016-07-02 06:34:54Z
           - fixed a test that fails with newer ModuleIncluder, that changed
             the text of an error message

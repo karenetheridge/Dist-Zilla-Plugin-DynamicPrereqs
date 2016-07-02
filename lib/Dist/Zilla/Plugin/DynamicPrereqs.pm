@@ -5,7 +5,7 @@ package Dist::Zilla::Plugin::DynamicPrereqs;
 # ABSTRACT: Specify dynamic (user-side) prerequisites for your distribution
 # KEYWORDS: plugin distribution metadata MYMETA prerequisites Makefile.PL dynamic
 
-our $VERSION = '0.030';
+our $VERSION = '0.031';
 
 use Moose;
 with
