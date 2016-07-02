@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.029
+version 0.030
 
 =head1 SYNOPSIS
 
@@ -169,7 +169,7 @@ C<parse_args()> - returns the hashref of options that were passed as arguments t
 
 =item *
 
-C<can_xs()> - XS capability testing via L<ExtUtils::HasCompiler> (don't forget to also check C<want_pp>!)
+C<can_xs()> - XS capability testing via L<ExtUtils::HasCompiler> (don't forget to also check C<want_pp>!) Available in this form since 0.029.
 
 =item *
 
@@ -183,9 +183,11 @@ C<can_run()> - check if we can run some command
 
 C<can_use($module [, $version ])> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
 
+=for stopwords backcompat
+
 =item *
 
-C<has_module($module [, $version_or_range ])> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.  When passed a second argument, returns true or false; otherwise, returns undef or the module's C<$VERSION>. (Current API available since version 0.015.)
+C<has_module($module [, $version_or_range ])> - checks if a module (optionally, at a specified version or matching a L<version range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not load the module, so is safe to use with modules that have side effects when loaded.  When passed a second argument, returns true or false; otherwise, returns undef or the module's C<$VERSION>. Note that for extremely simple usecases (module has no side effects when loading, and no explicit version is needed), it can be simpler and more backcompat-friendly to simply do: C<< eval { require Foo::Bar } >>. (Current API available since version 0.015.)
 
 =item *
 
