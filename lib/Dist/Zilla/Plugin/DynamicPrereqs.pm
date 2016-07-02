@@ -240,18 +240,18 @@ sub _build__sub_definitions
 
 my %sub_prereqs = (
     can_cc => {
-        'Config' => '0',
+        'Config' => '0',                # core since perl 5.00307
     },
     can_run => {
-        'File::Spec' => '0',
-        'Config' => '0',
+        'File::Spec' => '0',            # core since perl 5.00405
+        'Config' => '0',                # core since perl 5.00307
     },
     parse_args => {
-        'Text::ParseWords' => '0',
+        'Text::ParseWords' => '0',      # core since perl 5.000
     },
     has_module => {
-        'Module::Metadata' => '0',
-        'CPAN::Meta::Requirements' => '2.120620',   # for add_string_requirement
+        'Module::Metadata' => '0',      # core since perl 5.013009
+        'CPAN::Meta::Requirements' => '2.120620',   # core since perl 5.015007
     },
 );
 
