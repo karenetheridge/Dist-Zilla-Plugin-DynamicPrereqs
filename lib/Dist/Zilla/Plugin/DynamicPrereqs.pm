@@ -566,13 +566,17 @@ Available subs are:
   (optionally, at a specified version) can be loaded. (If you don't want to load
   the module, you should use C<< has_module >>, see below.)
 
+=for stopwords backcompat
+
 * C<has_module($module [, $version_or_range ])> - checks if a module
   (optionally, at a specified version or matching a L<version
   range|CPAN::Meta::Spec/version_ranges>) is available in C<%INC>. Does not
   load the module, so is safe to use with modules that have side effects when
   loaded.  When passed a second argument, returns true or false; otherwise,
-  returns undef or the module's C<$VERSION>. (Current API available since
-  version 0.015.)
+  returns undef or the module's C<$VERSION>.
+  Note that for extremely simple usecases (module has no side effects when loading, and no explicit version is
+  needed), it can be simpler and more backcompat-friendly to simply do: C<< eval { require Foo::Bar } >>.
+  (Current API available since version 0.015.)
 
 * C<is_smoker()> - is the installation on a smoker machine?
 
