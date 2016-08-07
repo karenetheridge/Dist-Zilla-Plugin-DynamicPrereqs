@@ -513,13 +513,13 @@ When combined with C<-raw>/C<-body> lines, the condition is placed first in a C<
 statement, and the C<-raw>/C<-body> lines are contained as the body of the block. For example:
 
     [DynamicPrereqs]
-    -condition = $] > '5.020'
+    -condition = "$]" > '5.020'
     -body = requires('1.003000')
 
 results in the F<Makefile.PL> snippet (note that whitespace is not added, in
 case this affects the parsing:
 
-    if ($] > '5.020') {
+    if ("$]" > '5.020') {
     requires('Role::Tiny', '1.003000')
     }
 
