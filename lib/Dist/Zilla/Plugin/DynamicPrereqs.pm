@@ -271,7 +271,8 @@ sub gather_files {
             my $cpath = $path->canonpath;
 
             my $file = first { $_->name eq $path or $_->name eq $cpath } @{ $self->zilla->files };
-            if (not $file) {
+            if (not $file)
+            {
                 $self->log([ 'inlining %s into inc/', $module ]);
                 my $installed_filename = Module::Metadata->find_module_by_name($module)
                     or $self->log_fatal([ 'Can\'t locate %s', $module ]);
