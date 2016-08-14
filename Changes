@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - in _add_prereq sub, do not warn about prereq merging if the
+            previous version being merged into was a mere "0"
 
 0.031     2016-07-03 06:07:23Z (TRIAL RELEASE)
           - removed dependency on Dist::Zilla::Role::ModuleIncluder by
