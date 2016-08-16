@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.032     2016-08-16 01:00:05Z
           - in _add_prereq sub, do not warn about prereq merging if the
             previous version being merged into was a mere "0"
 
