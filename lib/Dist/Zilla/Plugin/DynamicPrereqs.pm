@@ -640,6 +640,12 @@ Future planned features:
 * something like C<is_perl_at_least('5.008001')> for testing C<$]>
 * inlining of sub content for some checks, to allow constant folding (e.g. C<$^O> and C<$]> checks)
 
+=head1 LIMITATIONS
+
+It is not possible, given the current features of L<ExtUtils::MakeMaker>, to have dynamic prerequisites using the
+C<recommends>, C<suggests> or C<conflicts> types. (This is because these get added via the C<META_ADD> or
+C<META_MERGE> Makefile arguments, and these are ignored for the generation of F<MYMETA.json>.)
+
 =head1 SEE ALSO
 
 =for :list

@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - documentation added regarding the lack of ability to use dynamic
+            requires-recommends, requires-suggests etc
 
 0.032     2016-08-16 01:00:05Z
           - in _add_prereq sub, do not warn about prereq merging if the
