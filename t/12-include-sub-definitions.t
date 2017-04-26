@@ -64,7 +64,7 @@ cmp_deeply(
                 requires => {
                     'ExtUtils::MakeMaker' => ignore,
                     'Config' => '0',
-                    'File::Spec' => 0,
+                    'File::Spec' => '0',
                     'Text::ParseWords' => '0',
                     'Module::Metadata' => '0',
                     'CPAN::Meta::Requirements' => '2.120620',
