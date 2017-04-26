@@ -246,6 +246,9 @@ my %sub_prereqs = (
         'Module::Metadata' => '0',      # core since perl 5.013009
         'CPAN::Meta::Requirements' => '2.120620',   # core since perl 5.015007
     },
+    is_miniperl => {
+        'DynaLoader' => '0',            # core since perl 5.000
+    },
 );
 
 # instead of including these dependencies in configure-requires, we inline
@@ -557,6 +560,9 @@ Available subs are:
 * C<can_cc()> - can we locate a (the) C compiler
 
 * C<can_run()> - check if we can run some command
+
+* C<is_miniperl()> - returns true if the current perl is miniperl (this may affect your ability to run XS code)
+  Available since 0.033.
 
 * C<can_use($module [, $version ])> - checks if a module
   (optionally, at a specified version) can be loaded. (If you don't want to load

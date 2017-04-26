@@ -68,6 +68,7 @@ cmp_deeply(
                     'Text::ParseWords' => '0',
                     'Module::Metadata' => '0',
                     'CPAN::Meta::Requirements' => '2.120620',
+                    'DynaLoader' => '0',
                 },
             },
             develop => {
