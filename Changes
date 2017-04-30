@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.033     2017-04-30 18:58:42Z
           - documentation added regarding the lack of ability to use dynamic
             requires-recommends, requires-suggests etc
           - add is_miniperl() helper sub

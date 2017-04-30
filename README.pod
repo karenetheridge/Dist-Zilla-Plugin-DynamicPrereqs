@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.032
+version 0.033
 
 =head1 SYNOPSIS
 
@@ -181,6 +181,10 @@ C<can_run()> - check if we can run some command
 
 =item *
 
+C<is_miniperl()> - returns true if the current perl is miniperl (this may affect your ability to run XS code) Available since 0.033.
+
+=item *
+
 C<can_use($module [, $version ])> - checks if a module (optionally, at a specified version) can be loaded. (If you don't want to load the module, you should use C<< has_module >>, see below.)
 
 =for stopwords backcompat
@@ -281,6 +285,12 @@ something like C<is_perl_at_least('5.008001')> for testing C<$]>
 inlining of sub content for some checks, to allow constant folding (e.g. C<$^O> and C<$]> checks)
 
 =back
+
+=head1 LIMITATIONS
+
+It is not possible, given the current features of L<ExtUtils::MakeMaker>, to have dynamic prerequisites using the
+C<recommends>, C<suggests> or C<conflicts> types. (This is because these get added via the C<META_ADD> or
+C<META_MERGE> Makefile arguments, and these are ignored for the generation of F<MYMETA.json>.)
 
 =head1 SEE ALSO
 
