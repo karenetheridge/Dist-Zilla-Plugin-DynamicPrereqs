@@ -618,7 +618,8 @@ Available subs are:
 The implementations for some subroutines (in particular, C<can_xs>, C<can_cc>
 and C<can_run> are still works in progress, incompatible with some architectures and
 cannot yet be considered a suitable generic solution. Until we are more
-confident in their implementations, a warning will be printed upon use, and
+confident in their implementations, a warning will be printed (to the distribution author)
+upon use, and
 their use B<is not advised> without prior consultation with the author and
 other members of the Perl Toolchain Gang
 (see L<C<#toolchain> on C<irc.perl.org>|irc://irc.perl.org/#toolchain>).
