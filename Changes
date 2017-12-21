@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
+{{$NEXT}}
+
 0.034     2017-12-21 00:49:09Z
           - can_cc implementation updated to match
             Module::Install::Can::can_cc, by adding a code snippet for VMS
