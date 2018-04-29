@@ -17,6 +17,10 @@ perl:
   - "5.12"
   - "5.10"
   - "5.8"
+matrix:
+  allow_failures:
+      # some prereqs may require 5.10
+    - perl: "5.8"
 env:
   global:
     - AUTHOR_TESTING=1
