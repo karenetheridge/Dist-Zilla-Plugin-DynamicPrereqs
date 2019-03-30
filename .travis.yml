@@ -22,6 +22,7 @@ matrix:
   allow_failures:
       # some prereqs may require 5.10
     - perl: "5.8"
+  fast_finish: 1
 env:
   global:
     - AUTHOR_TESTING=1
