@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
-{{$NEXT}}
+0.035     2019-04-03 04:46:16Z
           - the result of parse_args() is now cached so it can be called
             multiple times with efficiency
 
