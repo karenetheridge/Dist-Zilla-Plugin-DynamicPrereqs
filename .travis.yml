@@ -17,11 +17,7 @@ perl:
   - "5.14"
   - "5.12"
   - "5.10"
-  - "5.8"
 matrix:
-  allow_failures:
-      # some prereqs may require 5.10
-    - perl: "5.8"
   fast_finish: 1
 env:
   global:
