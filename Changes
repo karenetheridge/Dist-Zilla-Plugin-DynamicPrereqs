@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
+{{$NEXT}}
+
 0.036     2020-01-27 00:25:40Z
           - use -nologo option for VC Perl (nmake) builds (in tests); (RT#131185
           and PR#2; thanks Graham Ollis!)
