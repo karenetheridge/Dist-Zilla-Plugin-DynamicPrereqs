@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.035
+version 0.036
 
 =head1 SYNOPSIS
 
@@ -336,11 +336,21 @@ I am also usually active on irc, as 'ether' at C<irc.perl.org>.
 
 Karen Etheridge <ether@cpan.org>
 
-=head1 CONTRIBUTOR
+=head1 CONTRIBUTORS
 
 =for stopwords Graham Ollis
 
+=over 4
+
+=item *
+
 Graham Ollis <perl@wdlabs.com>
+
+=item *
+
+Graham Ollis <plicease@cpan.org>
+
+=back
 
 =head1 COPYRIGHT AND LICENCE
 
