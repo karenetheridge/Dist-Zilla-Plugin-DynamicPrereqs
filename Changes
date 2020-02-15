@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - update a test to use a local module to test has_module(), to
+            reduce possible sources of errors (RT#131684)
 
 0.036     2020-01-27 00:25:40Z
           - use -nologo option for VC Perl (nmake) builds (in tests); (RT#131185
