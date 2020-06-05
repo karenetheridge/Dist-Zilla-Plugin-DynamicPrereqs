@@ -600,11 +600,11 @@ Available subs are:
 * C<requires($module [, $version ])> - alias for C<runtime_requires>.
   Added in 0.016.
 
-* C<build_requires($module [, $version ])> - adds the module to runtime
+* C<build_requires($module [, $version ])> - adds the module to build
   prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
   Added in 0.016.
 
-* C<test_requires($module [, $version ])> - adds the module to runtime
+* C<test_requires($module [, $version ])> - adds the module to test
   prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
   Added in 0.016.
 
