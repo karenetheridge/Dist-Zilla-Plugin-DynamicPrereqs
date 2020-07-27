@@ -518,7 +518,7 @@ statement, and the C<-raw>/C<-body> lines are contained as the body of the block
 
     [DynamicPrereqs]
     -condition = "$]" > '5.020'
-    -body = requires('1.003000')
+    -body = requires('Role::Tiny', '1.003000')
 
 results in the F<Makefile.PL> snippet (note that whitespace is not added, in
 case this affects the parsing:
