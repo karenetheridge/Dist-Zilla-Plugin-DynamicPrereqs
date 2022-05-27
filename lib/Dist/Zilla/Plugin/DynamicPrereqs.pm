@@ -608,8 +608,10 @@ Available subs are:
   prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
   Added in 0.016.
 
-* C<want_pp> - true if the user or CPAN client explicitly specified PUREPERL_ONLY
-  (indicating that no XS-requiring modules or code should be installed)
+* C<want_pp()> - true if the user or CPAN client explicitly specified C<PUREPERL_ONLY>
+  (indicating that no XS-requiring modules or code should be installed). false if
+  the user has explicitly specified C<PUREPERL_ONLY> as 0. undef if no preference
+  was specified.
 
 =end :list
 
