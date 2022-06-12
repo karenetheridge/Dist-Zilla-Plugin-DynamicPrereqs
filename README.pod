@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::DynamicPrereqs - Specify dynamic (user-side) prerequisites 
 
 =head1 VERSION
 
-version 0.039
+version 0.040
 
 =head1 SYNOPSIS
 
@@ -235,7 +235,11 @@ C<test_requires($module [, $version ])> - adds the module to test prereqs (as a 
 
 =item *
 
-C<want_pp> - true if the user or CPAN client explicitly specified PUREPERL_ONLY (indicating that no XS-requiring modules or code should be installed)
+C<want_pp()> - true if the user or CPAN client explicitly specified C<PUREPERL_ONLY> (indicating that no XS-requiring modules or code should be installed). false if the user has explicitly specified C<PUREPERL_ONLY> as 0. undef if no preference was specified.
+
+=item *
+
+C<want_xs()> - true if C<PUREPERL_ONLY> was specified as 0, or if it was not specified and compiling XS modules is possible (checked via can_xs).
 
 =back
 
@@ -330,17 +334,27 @@ L<http://dzil.org/#mailing-list>.
 There is also an irc channel available for users of this distribution, at
 L<C<#distzilla> on C<irc.perl.org>|irc://irc.perl.org/#distzilla>.
 
-I am also usually active on irc, as 'ether' at C<irc.perl.org> and C<irc.freenode.org>.
+I am also usually active on irc, as 'ether' at C<irc.perl.org> and C<irc.libera.chat>.
 
 =head1 AUTHOR
 
 Karen Etheridge <ether@cpan.org>
 
-=head1 CONTRIBUTOR
+=head1 CONTRIBUTORS
 
-=for stopwords Graham Ollis
+=for stopwords Graham Knop Ollis
+
+=over 4
+
+=item *
+
+Graham Knop <haarg@haarg.org>
+
+=item *
 
 Graham Ollis <plicease@cpan.org>
+
+=back
 
 =head1 COPYRIGHT AND LICENCE
 
