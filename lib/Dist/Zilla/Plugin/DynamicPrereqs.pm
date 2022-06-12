@@ -342,6 +342,7 @@ my %sub_dependencies = (
     build_requires => [ qw(_add_prereq) ],
     test_requires => [ qw(_add_prereq) ],
     want_pp => [ qw(parse_args) ],
+    want_xs => [ qw(want_pp can_xs) ],
 );
 
 has _all_required_subs => (
@@ -608,8 +609,13 @@ Available subs are:
   prereqs (as a shorthand for editing the hashes in F<Makefile.PL> directly).
   Added in 0.016.
 
-* C<want_pp> - true if the user or CPAN client explicitly specified PUREPERL_ONLY
-  (indicating that no XS-requiring modules or code should be installed)
+* C<want_pp()> - true if the user or CPAN client explicitly specified C<PUREPERL_ONLY>
+  (indicating that no XS-requiring modules or code should be installed). false if
+  the user has explicitly specified C<PUREPERL_ONLY> as 0. undef if no preference
+  was specified.
+
+* C<want_xs()> - true if C<PUREPERL_ONLY> was specified as 0, or if it was not
+  specified and compiling XS modules is possible (checked via can_xs).
 
 =end :list
 
