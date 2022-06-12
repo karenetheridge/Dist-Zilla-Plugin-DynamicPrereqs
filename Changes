@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-DynamicPrereqs
 
 {{$NEXT}}
+          - want_pp now returns undef when PUREPERL_ONLY is not specified
+          - added want_xs sub
 
 0.039     2020-10-26 20:33:35Z
           - fix incorrect warning message (and possible uninitialized warning)
