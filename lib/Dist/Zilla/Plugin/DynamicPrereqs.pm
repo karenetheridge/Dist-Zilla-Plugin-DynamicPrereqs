@@ -232,7 +232,7 @@ my %sub_prereqs = (
     },
     has_module => {
         'Module::Metadata' => '0',      # core since perl 5.013009
-        'CPAN::Meta::Requirements' => '2.120620',   # core since perl 5.015007
+        'CPAN::Meta::Requirements' => '2.120620',   # this version in core since perl 5.015007
     },
     is_miniperl => {
         'DynaLoader' => '0',            # core since perl 5.000
